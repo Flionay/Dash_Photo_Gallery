@@ -5,7 +5,9 @@ import feffery_utils_components as fuc
 from dash.dependencies import Input, Output, State
 import config
 import json
-
+import oss2
+import os
+from flask import request
 from util import get_exif_data
 from dash_iconify import DashIconify
 from server import app
@@ -71,12 +73,16 @@ app.layout = html.Div(
     Output("albums-data", "data"),
     Input("url", "pathname"),  # 用户刷新页面时触发
 )
-def update_albums_data(pathname):
+def update_app_albums_data(pathname):
     print("用户刷新触发")
     with open("albums.json", "r", encoding="utf-8") as f:
         albums_data = json.load(f)
     return albums_data
 
+
+
+
+
+
 if __name__ == "__main__":
     app.run_server(debug=True)
-

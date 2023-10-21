@@ -342,11 +342,9 @@ def display_photos_in_album(albums_data, pathname):
     Output("page-content", "children", allow_duplicate=True),
     [
         Input("url", "pathname"),
-        #
         Input("albums-data", "data"),
         Input("theme-status", "data"),
     ],
-    #    State("theme-status", "data"),
 )
 def display_page(
     pathname,

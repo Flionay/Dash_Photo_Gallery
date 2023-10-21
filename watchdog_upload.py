@@ -185,6 +185,19 @@ def add_watermark(input_image_path, output_image_path, watermark_path='sy.png', 
             
             
 
+def send_webhook():
+    import requests
+    webhook_url = "http://localhost:8050/webhook"  # 替换为您的 Dash 应用地址
+    try:
+        response = requests.post(webhook_url)
+        if response.status_code == 200:
+            print("Webhook 请求成功，Dash 应用已更新。")
+        else:
+            print(f"Webhook 请求失败，状态码: {response.status_code}")
+    except Exception as e:
+        print(f"发送 webhook 请求时出错: {e}")
+
+
 if __name__ == '__main__':
     # add_watermark('output/上海/DSC03640.webp', 'output_image.jpg')
     # pass

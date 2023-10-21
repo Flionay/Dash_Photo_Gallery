@@ -5,15 +5,17 @@ from io import BytesIO
 import requests  # 导入 requests 库
 import datetime
 from fractions import Fraction  
+import json
+import os
+root_path = os.path.dirname(os.path.abspath(__file__))
 
 def get_exif_data(image_url):
     print("输入的url",image_url)
-    # 假设远程 JSON 文件的 URL 是固定的
-    json_url = "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/exif_data.json"  # 替换为实际的 JSON 文件 URL
+    # 本地 JSON 文件的路径
+    json_file_path = os.path.join(root_path, 'exif_data.json')  # 替换为实际的本地 JSON 文件路径
     try:
-        response = requests.get(json_url)
-        response.raise_for_status()  # 检查请求是否成功
-        exif_data = response.json()  # 解析 JSON 数据
+        with open(json_file_path, 'r', encoding='utf-8') as json_file:
+            exif_data = json.load(json_file)  # 解析 JSON 数据
 
         # 根据 image_url 获取对应的 EXIF 数据
         position = '/'.join(image_url.split('/')[-2:]).split('.')[0]  # 只提取文件名，不添加扩展名
@@ -46,8 +48,14 @@ def get_exif_data(image_url):
         print(image_info)
         return image_info
 
-    except requests.RequestException as e:
-        print(f"请求错误: {e}")
+    except FileNotFoundError:
+        print(f"文件未找到: {json_file_path}")
+        return {}  # 返回空字典以防止程序崩溃
+    except json.JSONDecodeError:
+        print("解析 JSON 数据时出错")
+        return {}  # 返回空字典以防止程序崩溃
+    except Exception as e:
+        print(f"发生错误: {e}")
         return {}  # 返回空字典以防止程序崩溃
 
 def format_shutter_speed(exposure_time):
@@ -67,40 +75,6 @@ def format_shutter_speed(exposure_time):
         print(f"处理快门速度时出错: {e}")
         return "未知"
 
-def get_exif_datat(image_url):
-    try:
-        # 从 URL 下载图片
-        response = requests.get(image_url)
-        image = Image.open(BytesIO(response.content))
-
-        # 获取 EXIF 数据
-        exif_data = image._getexif()
-        if not exif_data:
-            return None
-
-        # 解析 EXIF 数据
-        parsed_exif = {}
-        for tag_id, value in exif_data.items():
-            tag = TAGS.get(tag_id, tag_id)
-            parsed_exif[tag] = value
-
-        # 提取所需的 EXIF 信息
-        image_info = {
-            "device": parsed_exif.get("Model", "未知设备"),
-            "aperture": parsed_exif.get("FNumber", "未知"),
-            "shutter_speed": parsed_exif.get("ExposureTime", "未知"),
-            "focal_length": parsed_exif.get("FocalLength", "未知"),
-            "iso": parsed_exif.get("ISOSpeedRatings", "未知"),
-            "date_time": parsed_exif.get("DateTime", "未知"),
-            "location": parsed_exif.get("GPSInfo", {}).get(GPSTAGS.get(2, "未知"), "未知") if "GPSInfo" in parsed_exif else "未知",
-            "copyright": parsed_exif.get("Copyright", "未知"),
-        }
-
-        return image_info
-
-    except Exception as e:
-        print(f"获取 EXIF 数据时出错: {e}")
-        return None
 
 
 if __name__ == "__main__":
