@@ -10,7 +10,7 @@ import os
 root_path = os.path.dirname(os.path.abspath(__file__))
 
 def get_exif_data(image_url):
-    print("输入的url",image_url)
+    # print("输入的url",image_url)
     # 本地 JSON 文件的路径
     json_file_path = os.path.join(root_path, 'exif_data.json')  # 替换为实际的本地 JSON 文件路径
     try:
@@ -27,7 +27,7 @@ def get_exif_data(image_url):
                 parsed_exif = value
 
             
-        print("匹配的图片",position,"匹配到的EXIF数据",parsed_exif)
+        # print("匹配的图片",position,"匹配到的EXIF数据",parsed_exif)
         #parsed_exif = {key: value for key, value in exif_data.items() if key.startswith(position)}  
         if not parsed_exif:  # 如果没有找到匹配的 EXIF 数据，返回空字典
             return {}
@@ -44,8 +44,10 @@ def get_exif_data(image_url):
             "位置": parsed_exif.get("Location", "未知"),
             "版权": parsed_exif.get("Copyright", f"© {current_year} Angyi. 保留所有权利。"),  # 版权信息
             "镜头": parsed_exif.get("LensModel", "未知"),  # 镜头型号
+            "Longitude": parsed_exif.get("Longitude", None),
+            "Latitude": parsed_exif.get("Latitude", None),
         }
-        print(image_info)
+        # print(image_info)
         return image_info
 
     except FileNotFoundError:
@@ -65,7 +67,7 @@ def parse_datetime(date_str):
     try:
         # 假设输入格式为 "YYYY:MM:DD HH:MM:SS"
         dt = datetime.datetime.strptime(date_str, "%Y:%m:%d %H:%M:%S")
-        print(dt)   
+        # print(dt)   
         return dt.strftime("%Y年%m月%d日 %H时")  # 返回格式为 "YYYY年MM月DD日 HH时"
     except ValueError:
         return "未知"  # 如果解析失败，返回"未知"

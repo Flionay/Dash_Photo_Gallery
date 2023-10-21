@@ -371,49 +371,40 @@ def display_map_page(albums_data):
     
     for album in albums_data.values():
         for image_url in album["images"]:
+            
             exif_data = get_exif_data(image_url)  # 获取 EXIF 数据
             lat = exif_data.get('Latitude') 
             lng = exif_data.get('Longitude')
-            
             if lat and lng:  # 确保经纬度存在
                 markers.append(
                     flc.LeafletCircleMarker(
                         center={'lat': lat, 'lng': lng},
                         radius=8,  # 设置标记半径
-                        color='blue',  # 设置标记颜色
-                        fill=True,
-                        fillColor='blue',
-                        fillOpacity=0.5,
+                        pathOptions={
+                            'color': 'black',
+                            'weight': 2,
+                            'dashArray': '5, 2, 5',
+                            'fillOpacity': 0.4,
+                            'fillColor': 'brown'
+                        },
                     )
                 )
-    print(markers)
+
     map_component = flc.LeafletMap(
         [
             flc.LeafletTileLayer(),
             *markers  # 将所有标记添加到地图组件
         ],
+        center={'lat': 34.3416, 'lng': 108.9402},  # 西安的经纬度
+        zoom=5,  # 设置初始缩放等级为 4
+        dragging=False,
+        doubleClickZoom=False,
         style={
             'height': '100%',  # 设置高度为100%
             'width': '100%'    # 设置宽度为100%
         }
     )
 
-
-    # sidebar = html.Div(
-    #     [
-    #         html.H2("相册", style={"textAlign": "center"}),
-    #         *album_links
-    #     ],
-    #     style={
-    #         "position": "absolute",
-    #         "top": "10px",
-    #         "left": "10px",
-    #         "background": "rgba(255, 255, 255, 0.8)",
-    #         "padding": "10px",
-    #         "borderRadius": "8px",
-    #         "zIndex": "1000"
-    #     }
-    # )
 
     return html.Div([
         # sidebar,
