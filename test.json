@@ -1,0 +1,101 @@
+{
+    "IMG_1594.jpeg": {
+        "CameraModel": "iPhone 11",
+        "LensModel": "iPhone 11 back dual wide camera 1.54mm f/2.4",
+        "ExposureTime": "1/25",
+        "FNumber": "2.4",
+        "ISO": "800",
+        "FocalLength": "1.54",
+        "Latitude": 36.05469444444444,
+        "Longitude": 120.33989722222222,
+        "DateTime": "2021:09:13 18:36:06"
+    },
+    "IMG_1306.jpeg": {
+        "CameraModel": "iPhone 11",
+        "LensModel": "iPhone 11 back dual wide camera 1.54mm f/2.4",
+        "ExposureTime": "1/888",
+        "FNumber": "2.4",
+        "ISO": "20",
+        "FocalLength": "1.54",
+        "Latitude": 36.676766666666666,
+        "Longitude": 117.0223,
+        "DateTime": "2021:07:10 09:20:23"
+    },
+    "IMG_1100.jpeg": {
+        "CameraModel": "iPhone 11",
+        "LensModel": "iPhone 11 back dual wide camera 4.25mm f/1.8",
+        "ExposureTime": "1/4608",
+        "FNumber": "1.8",
+        "ISO": "32",
+        "FocalLength": "4.25",
+        "Latitude": 36.122769444444444,
+        "Longitude": 120.47925555555555,
+        "DateTime": "2021:05:28 11:58:49"
+    },
+    "IMG_1439.jpeg": {
+        "CameraModel": "iPhone 11",
+        "LensModel": "iPhone 11 back dual wide camera 4.25mm f/1.8",
+        "ExposureTime": "1/5236",
+        "FNumber": "1.8",
+        "ISO": "32",
+        "FocalLength": "4.25",
+        "Latitude": 36.12190277777778,
+        "Longitude": 120.47946944444445,
+        "DateTime": "2021:08:07 12:40:08"
+    },
+    "IMG_1419.jpeg": {
+        "CameraModel": "iPhone 11",
+        "LensModel": "iPhone 11 back dual wide camera 4.25mm f/1.8",
+        "ExposureTime": "1/4608",
+        "FNumber": "1.8",
+        "ISO": "32",
+        "FocalLength": "4.25",
+        "Latitude": 36.05506111111111,
+        "Longitude": 120.33966111111111,
+        "DateTime": "2021:08:05 12:06:56"
+    },
+    "IMG_2461.JPG": {
+        "CameraModel": "vivo X60",
+        "LensModel": "Unknown",
+        "ExposureTime": "1000/772797",
+        "FNumber": "2.45",
+        "ISO": "50",
+        "FocalLength": "3.74",
+        "Latitude": 0.0,
+        "Longitude": 0.0,
+        "DateTime": "2022:05:27 17:53:42"
+    },
+    "IMG_1376.jpeg": {
+        "CameraModel": "iPhone 11",
+        "LensModel": "iPhone 11 back dual wide camera 1.54mm f/2.4",
+        "ExposureTime": "1/225",
+        "FNumber": "2.4",
+        "ISO": "20",
+        "FocalLength": "1.54",
+        "Latitude": 36.05687222222222,
+        "Longitude": 120.33724166666666,
+        "DateTime": "2021:07:21 17:45:47"
+    },
+    "IMG_1434.jpeg": {
+        "CameraModel": "iPhone 11",
+        "LensModel": "iPhone 11 back dual wide camera 4.25mm f/1.8",
+        "ExposureTime": "1/6757",
+        "FNumber": "1.8",
+        "ISO": "32",
+        "FocalLength": "4.25",
+        "Latitude": 36.056911111111106,
+        "Longitude": 120.3359611111111,
+        "DateTime": "2021:08:05 12:17:47"
+    },
+    "IMG_1552.jpeg": {
+        "CameraModel": "iPhone 11",
+        "LensModel": "iPhone 11 back dual wide camera 4.25mm f/1.8",
+        "ExposureTime": "1/25",
+        "FNumber": "1.8",
+        "ISO": "640",
+        "FocalLength": "4.25",
+        "Latitude": 36.052825,
+        "Longitude": 120.34027222222221,
+        "DateTime": "2021:09:01 18:49:40"
+    }
+}

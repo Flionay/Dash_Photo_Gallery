@@ -6,8 +6,8 @@ from PIL import Image, ExifTags
 import oss2
 import shutil
 from dotenv import load_dotenv
+import exifread
 import json
-
 # 加载 .env 文件中的环境变量
 load_dotenv()
 
@@ -70,6 +70,8 @@ class Handler(FileSystemEventHandler):
                     pass
                     self.copy_yaml_file(root, file, output_dir)
         self.upload_to_oss('gallery/exif_data.json',"output/exif_data.json")
+        time.sleep(10)
+        send_webhook()
 
     def copy_yaml_file(self, root, file, output_dir):
         file_path = os.path.join(root, file)
@@ -111,7 +113,7 @@ class Handler(FileSystemEventHandler):
         add_watermark(output_file, output_file)
         
     def upload_to_oss(self, remote_path, file_path):
-        print(remote_path,file_path)
+        # print(remote_path,file_path)
         bucket.enable_crc = False
         with open(file_path, 'rb') as fileobj:
             bucket.put_object(remote_path, fileobj)
@@ -129,6 +131,7 @@ def convert_exif_value(value):
         return float(value)  # 将IFDRational转换为浮点数
     return str(value)  # 其他类型转换为字符串
 
+
 def save_exif_to_json(directory_path, json_file_path):
     exif_data_dict = {}
 
@@ -137,28 +140,148 @@ def save_exif_to_json(directory_path, json_file_path):
             if file.lower().endswith(('.png', '.jpg', '.jpeg', '.JPG')):
                 file_path = os.path.join(root, file)
                 try:
-                    with Image.open(file_path) as img:
-                        exif_data = img._getexif()
-                        if exif_data is not None:
-                            # 将EXIF信息转换为可读格式
-                            readable_exif = {}
-                            for tag_id, value in exif_data.items():
-                                tag = ExifTags.TAGS.get(tag_id, tag_id)
-                                converted_value = convert_exif_value(value)  # 转换值
-                                # 过滤掉长度超过100的键和值
-                                if len(tag) <= 100 and len(str(converted_value)) <= 100:
-                                    readable_exif[tag] = converted_value  # 仅在长度合适时添加
-                            # 按照相册/图片的级别保存EXIF信息
-                            relative_path = os.path.relpath(file_path, directory_path)
-                            exif_data_dict[relative_path] = readable_exif
+                    with open(file_path,'rb') as img:
+                        # exif_data = img._getexif()
+                        tags = exifread.process_file(img)
+                        readable_exif = convert_exif_to_dict(tags)
+                        # print(readable_exif)
+                        # 按照相册/图片的级别保存EXIF信息
+                        relative_path = os.path.relpath(file_path, directory_path)
+                        exif_data_dict[relative_path] = readable_exif
                 except Exception as e:
                     print(f"无法处理文件 {file_path}: {e}")
+                    
+    
+    try:
+        with open(json_file_path, 'w', encoding='utf-8') as json_file:
+            print(exif_data_dict)
+            json.dump(exif_data_dict, json_file, ensure_ascii=False, indent=4)
+            print("JSON 文件已保存。")
+    except Exception as e:
+        print(f"写入 JSON 文件时出错: {e}")
 
-    # 将EXIF信息保存到JSON文件
-    with open(json_file_path, 'w', encoding='utf-8') as json_file:
-        json.dump(exif_data_dict, json_file, ensure_ascii=False, indent=4)
 
 
+
+def convert_exif_to_dict(exif_data):   
+
+    # 将分数列表转换为度数
+    def parse_gps_coordinate(values, ref):
+        degrees = values[0].num / values[0].den
+        minutes = values[1].num / values[1].den
+        seconds = values[2].num / values[2].den
+        coordinate = degrees + (minutes / 60.0) + (seconds / 3600.0)
+        if ref in ['S', 'W']:
+            coordinate = -coordinate
+        return coordinate
+    
+    # 提取需要的 EXIF 信息
+    exif_dict = {
+        "CameraModel": str(exif_data.get("Image Model", "Unknown")),
+        "LensModel": str(exif_data.get("EXIF LensModel", "Unknown")),
+        "ExposureTime": str(exif_data.get("EXIF ExposureTime", "Unknown")),
+        "FNumber": str(exif_data.get("EXIF FNumber", "Unknown")),
+        "ISO": str(exif_data.get("EXIF ISOSpeedRatings", "Unknown")),
+        "FocalLength": str(exif_data.get("EXIF FocalLength", "Unknown")),
+        "Latitude": None,
+        "Longitude": None,
+        "DateTime": "未知",
+        "Location": "未知"
+    }
+    # 解析曝光三要素
+    if "EXIF ExposureTime" in exif_data:
+        exif_dict["ExposureTime"] = str(exif_data["EXIF ExposureTime"])
+
+    if "EXIF FNumber" in exif_data:
+        fnumber = exif_data["EXIF FNumber"].values
+        exif_dict["FNumber"] = str(fnumber[0].num / fnumber[0].den)
+
+    if "EXIF ISOSpeedRatings" in exif_data:
+        exif_dict["ISO"] = str(exif_data["EXIF ISOSpeedRatings"])
+
+    if "EXIF FocalLength" in exif_data:
+        focal_length = exif_data["EXIF FocalLength"].values
+        exif_dict["FocalLength"] = str(focal_length[0].num / focal_length[0].den)
+
+    # 解析 GPS 信息
+    if "GPS GPSLatitude" in exif_data and "GPS GPSLatitudeRef" in exif_data:
+        lat_values = exif_data["GPS GPSLatitude"].values
+        lat_ref = exif_data["GPS GPSLatitudeRef"].printable
+        exif_dict["Latitude"] = parse_gps_coordinate(lat_values, lat_ref)
+
+    if "GPS GPSLongitude" in exif_data and "GPS GPSLongitudeRef" in exif_data:
+        lon_values = exif_data["GPS GPSLongitude"].values
+        lon_ref = exif_data["GPS GPSLongitudeRef"].printable
+        exif_dict["Longitude"] = parse_gps_coordinate(lon_values, lon_ref)
+
+    # 解析时间信息
+    if "Image DateTime" in exif_data:
+        exif_dict["DateTime"] = str(exif_data["Image DateTime"])
+    else:
+        exif_dict["DateTime"] = "未知"  # 添加默认值
+    
+    # print(exif_dict)
+    address = parse_location_rg(exif_data=exif_dict)
+    if address == "未知":
+        address = parse_location_gaode(exif_data=exif_dict)
+      
+    exif_dict["Location"] = address
+    return exif_dict
+        
+        
+
+def parse_location_gaode(exif_data):
+    
+    import requests
+    # 初始化 Nominatim
+    api_key = os.getenv('gaode_key')
+    try:
+        if "Latitude" in exif_data and "Longitude" in exif_data:
+            latitude = exif_data["Latitude"]
+            longitude = exif_data["Longitude"]
+            api_url = f"https://restapi.amap.com/v3/geocode/regeo?output=json&location={longitude},{latitude}&key={api_key}&radius=500&extensions=all "
+            # print(api_url)
+            response = requests.get(api_url)
+            location = response.json()
+            # time.sleep(10)
+            # print(location)
+            if location:
+                return location['regeocode']['addressComponent']['province'][:-1] + " · " + \
+                    location['regeocode']['addressComponent']['district'] + "· " + \
+                    location['regeocode']['addressComponent']['township']
+            else:
+                return "未知"
+        else:
+            return "未知"
+    except Exception as e:
+        # print(e)
+        return "未知"
+
+def parse_location_rg(exif_data):
+    from geopy.geocoders import Nominatim
+
+    # 初始化 Nominatim
+    geolocator = Nominatim(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.90 Safari/537.36")
+
+    if "Latitude" in exif_data and "Longitude" in exif_data:
+        try:
+            latitude = exif_data["Latitude"]
+            longitude = exif_data["Longitude"]
+            location = geolocator.reverse(f"{latitude}, {longitude}")
+            
+            if location:
+                return location.raw['address']['state'][:-1] + " · " + \
+                    location.raw['address']['city'] + " · " + \
+                    location.raw['address']['suburb']
+            else:
+                return "未知位置"
+        except Exception as e:
+            # print(e)
+            return "未知"
+            
+    else:
+        return "未知"
+    
 
 def add_watermark(input_image_path, output_image_path, watermark_path='sy.png', opacity=0.8):
     # 打开输入图片和水印图片
@@ -184,7 +307,6 @@ def add_watermark(input_image_path, output_image_path, watermark_path='sy.png', 
             base_image.save(output_image_path, exif=exif_data)
             
             
-
 def send_webhook():
     import requests
     webhook_url = "http://localhost:8050/webhook"  # 替换为您的 Dash 应用地址
@@ -200,7 +322,8 @@ def send_webhook():
 
 if __name__ == '__main__':
     # add_watermark('output/上海/DSC03640.webp', 'output_image.jpg')
-    # pass
+    # # pass
     w = Watcher()
     w.run()
     
+    save_exif_to_json("/Users/angyi/Documents/图片/Gallery/青岛", './test.json')

@@ -34,7 +34,7 @@ app.layout = html.Div(
                 render_navbar(),
                 # 内容区
                 html.Div(
-                    id="page-content", style={"padding": "40px", "textAlign": "center"}
+                    id="page-content", style={"padding": "0px", "textAlign": "center"}
                 ),
                 fac.AntdModal(
                     id="modal-content",

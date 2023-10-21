@@ -2,6 +2,7 @@ import dash
 from dash import html, dcc, callback_context
 import feffery_antd_components as fac
 import feffery_utils_components as fuc
+import feffery_leaflet_components as flc
 from dash.dependencies import Input, Output, State
 from urllib.parse import unquote
 from server import app
@@ -17,9 +18,54 @@ from .photos import (
 
 def create_image_metadata(image_data, album_name):
     gutter_item = "0px 40px"
-    
+        
+    location = image_data.get('位置', '未知')
+    print(location)
+    if location == "未知":
+        location = album_name
     return html.Div(
         [
+            html.Div(
+                [
+                    html.P("时间", className="text_row_gray"),
+                    html.Div(
+                        style={"display": "flex", "alignItems": "center", "color":"gray"},
+                        children=[
+                            DashIconify(
+                                icon="fa6-solid:map-location",
+                                style={"fontSize": "16px", "marginRight": "5px", "color":"gray"},
+                            ),
+                            html.P(
+                                f"{image_data.get('时间', '未知')}",
+                                style={"margin": "0", "fontSize": "14px", "color":"gray"},
+                            ),
+                        ],
+                    ),
+                ],
+                className="image_meta_item",
+                style={"margin": gutter_item},
+            ),
+
+            html.Div(
+                    [
+                    html.P("地点", className="text_row_gray"),
+                    html.Div(
+                        style={"display": "flex", "alignItems": "center", "color":"gray"},
+                        children=[
+                            DashIconify(
+                                icon="fa6-solid:map-location",
+                                style={"fontSize": "16px", "marginRight": "5px", "color":"gray"},
+                            ),
+                            html.P(
+                                f"{location}",
+                                style={"margin": "0", "fontSize": "14px", "color":"gray"},
+                            ),
+                        ],
+                    ),
+                ],
+                className="image_meta_item",
+                style={"margin": gutter_item},
+            ),
             html.Div(
                 [
                     html.P("相机", className="text_row_gray"),
@@ -85,26 +131,7 @@ def create_image_metadata(image_data, album_name):
                 style={"margin": gutter_item},
 
             ),
-            html.Div(
-                [
-                    html.P("地点", className="text_row_gray"),
-                    html.Div(
-                        style={"display": "flex", "alignItems": "center", "color":"gray"},
-                        children=[
-                            DashIconify(
-                                icon="fa6-solid:map-location",
-                                style={"fontSize": "16px", "marginRight": "5px", "color":"gray"},
-                            ),
-                            html.P(
-                                f"{album_name}",
-                                style={"margin": "0", "fontSize": "14px", "color":"gray"},
-                            ),
-                        ],
-                    ),
-                ],
-                className="image_meta_item",
-                style={"margin": gutter_item},
-            ),
+
             html.Div(
                 [
                     html.P("镜头", className="text_row_gray"),
@@ -292,7 +319,7 @@ def display_photos_in_album(albums_data, pathname):
     album = albums_data[album_name]
     # 计算每列的图片数量
     num_images = len(album["images"])
-    images_per_column = num_images // 3  # 每列的基本图片数量
+    images_per_column = num_images // 3  # 每列的基本���片数量
     remainder = num_images % 3  # 余数
     print(remainder)
     # 初始化列
@@ -337,6 +364,63 @@ def display_photos_in_album(albums_data, pathname):
     )
 
 
+# 添加地图页面的函数
+def display_map_page(albums_data):
+    
+    markers = []
+    
+    for album in albums_data.values():
+        for image_url in album["images"]:
+            exif_data = get_exif_data(image_url)  # 获取 EXIF 数据
+            lat = exif_data.get('Latitude') 
+            lng = exif_data.get('Longitude')
+            
+            if lat and lng:  # 确保经纬度存在
+                markers.append(
+                    flc.LeafletCircleMarker(
+                        center={'lat': lat, 'lng': lng},
+                        radius=8,  # 设置标记半径
+                        color='blue',  # 设置标记颜色
+                        fill=True,
+                        fillColor='blue',
+                        fillOpacity=0.5,
+                    )
+                )
+    print(markers)
+    map_component = flc.LeafletMap(
+        [
+            flc.LeafletTileLayer(),
+            *markers  # 将所有标记添加到地图组件
+        ],
+        style={
+            'height': '100%',  # 设置高度为100%
+            'width': '100%'    # 设置宽度为100%
+        }
+    )
+
+
+    # sidebar = html.Div(
+    #     [
+    #         html.H2("相册", style={"textAlign": "center"}),
+    #         *album_links
+    #     ],
+    #     style={
+    #         "position": "absolute",
+    #         "top": "10px",
+    #         "left": "10px",
+    #         "background": "rgba(255, 255, 255, 0.8)",
+    #         "padding": "10px",
+    #         "borderRadius": "8px",
+    #         "zIndex": "1000"
+    #     }
+    # )
+
+    return html.Div([
+        # sidebar,
+        map_component
+    ], style={"position": "relative", "height": "100vh", "width": "100%"})  # 确保父容器宽度为100%
+
+
 # 根据url显示不同页面
 @app.callback(
     Output("page-content", "children", allow_duplicate=True),
@@ -360,6 +444,9 @@ def display_page(
 
     elif pathname == "/random":
         return display_photos(albums_data) #所有图片预览
+    # 在 display_page 函数中添加地图页面的条件
+    elif pathname == "/map":
+        return display_map_page(albums_data)
 
     elif unquote(pathname.strip("/")) in albums_data:
         return display_photos_in_album(albums_data, pathname)

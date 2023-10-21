@@ -27,7 +27,7 @@ def get_exif_data(image_url):
                 parsed_exif = value
 
             
-        # print("匹配的图片",position,"匹配到的EXIF数据",parsed_exif)
+        print("匹配的图片",position,"匹配到的EXIF数据",parsed_exif)
         #parsed_exif = {key: value for key, value in exif_data.items() if key.startswith(position)}  
         if not parsed_exif:  # 如果没有找到匹配的 EXIF 数据，返回空字典
             return {}
@@ -35,13 +35,13 @@ def get_exif_data(image_url):
         current_year = datetime.datetime.now().year 
         # 提取所需的 EXIF 信息
         image_info = {
-            "设备": parsed_exif.get("Model", "未知设备"),  # 设备型号
-            "光圈": "F/"+parsed_exif.get("FNumber", "未知"),  # 光圈
-            "快门速度":format_shutter_speed(parsed_exif.get("ExposureTime", "未知")),  # 快门速度
+            "设备": parsed_exif.get("CameraModel", "未知设备"),  # 设备型号
+            "光圈": "F/" + parsed_exif.get("FNumber", "未知"),  # 光圈
+            "快门速度": parsed_exif.get("ExposureTime", "未知"),  # 快门速度
             "焦距": parsed_exif.get("FocalLength", "未知"),  # 焦距
-            "ISO": parsed_exif.get("ISOSpeedRatings", "未知"),  # ISO
-            "拍摄时间": parsed_exif.get("DateTimeOriginal", parsed_exif.get("DateTime", "未知")),  # 拍摄时间
-            # "位置": parsed_exif.get("GPSInfo", {}).get(GPSTAGS.get(2, "未知"), "未知") if "GPSInfo" in parsed_exif else "未知",  # 位置
+            "ISO": parsed_exif.get("ISO", "未知"),  # ISO
+            "时间": parse_datetime(parsed_exif.get("DateTime", "未知")),  # 拍摄时间
+            "位置": parsed_exif.get("Location", "未知"),
             "版权": parsed_exif.get("Copyright", f"© {current_year} Angyi. 保留所有权利。"),  # 版权信息
             "镜头": parsed_exif.get("LensModel", "未知"),  # 镜头型号
         }
@@ -57,6 +57,21 @@ def get_exif_data(image_url):
     except Exception as e:
         print(f"发生错误: {e}")
         return {}  # 返回空字典以防止程序崩溃
+
+def parse_datetime(date_str):
+    """将日期字符串解析为年月日时格式"""
+    if date_str == "未知":
+        return "未知"
+    try:
+        # 假设输入格式为 "YYYY:MM:DD HH:MM:SS"
+        dt = datetime.datetime.strptime(date_str, "%Y:%m:%d %H:%M:%S")
+        print(dt)   
+        return dt.strftime("%Y年%m月%d日 %H时")  # 返回格式为 "YYYY年MM月DD日 HH时"
+    except ValueError:
+        return "未知"  # 如果解析失败，返回"未知"
+
+def format_coordinate(value):
+    return "{:.2f}".format(value) if value != "未知" else "未知"
 
 def format_shutter_speed(exposure_time):
     if exposure_time == "未知":
@@ -89,5 +104,5 @@ if __name__ == "__main__":
 
     # # 输出解析后的字典
     # print(gps_info_dict.get(2).decode())
-    info = get_exif_data("https://angyi.oss-cn-beijing.aliyuncs.com/gallery/北京/IMG_3003.webp")
+    info = get_exif_data("https://angyi.oss-cn-beijing.aliyuncs.com/gallery/东方明珠/DSC04080.webp")
     print(info)
