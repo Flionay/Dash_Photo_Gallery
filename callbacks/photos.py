@@ -1,4 +1,3 @@
-
 import dash
 from dash import html, dcc, callback_context
 import feffery_antd_components as fac
@@ -121,192 +120,130 @@ def show_image_modal(n_clicks_list, albums_data, pathname):
                         },  # 充满宽度，保持比例
                         preview=False,
                     ),
-                    html.Div(
-                        style={
-                            "display": "flex",
-                            "justifyContent": "center",
-                            "padding": "30px",
-                            "background": "rgba(0, 0, 0, 0.0)",
-                            "borderRadius": "8px",
-                            # "boxShadow": "0 2px 10px rgba(0, 0, 0, 0.1)",
-                        },
-                        children=[
-                            html.Div(
-                                [
-                                    html.P(
-                                        "相机",  # 第一排放两个字“相机”
-                                       className="text_row"
-                                    ),
-                                    html.Div(
-                                        style={
-                                            "display": "flex",
-                                            "alignItems": "center",
-                                        },
-                                        children=[
-                                            DashIconify(
-                                                icon="solar:camera-broken",  # 使用 Antd 图标
-                                                style={
-                                                    "fontSize": "16px",
-                                                    "marginRight": "5px",
-                                                },
-                                            ), 
-                                            html.P(
-                                                f"{image_data.get('设备', '未知')}",  # 获取到的设备信息
-                                                style={
-                                                    "margin": "0",
-                                                    "fontSize": "14px",
-                                                },
-                                            ),
-                                        ],
-                                    ),
-                                ],className="image_meta_item"
-                                
-                            ),
-                            html.Div(
-                                [
-                                    html.P(
-                                        "参数", 
-                                       className="text_row"
-                                    ),
-                                    html.Div(
-                                        style={
-                                            "display": "flex",
-                                            "alignItems": "center",
-                                        },
-                                        children=[
-                                            DashIconify(
-                                                icon="fluent-mdl2:focal-point",  # 使用 Antd 图标
-                                                style={
-                                                    "fontSize": "16px",
-                                                    "marginRight": "5px",
-                                                },
-                                            ), 
-                                            html.P(
-                                                f"{image_data.get('焦距', '未知')}",  # 获取到的设备信息
-                                                style={
-                                                    "margin": "0",
-                                                    "fontSize": "14px",
-                                                    "marginRight": "10px"
-                                                },
-                                            ),
-                                            
-                                            DashIconify(
-                                                icon="ion:aperture-outline",
-                                                style={
-                                                    "fontSize": "16px",
-                                                    "marginRight": "5px",
-                                                },
-                                            ), 
-                                            html.P(
-                                                f"{image_data.get('光圈', '未知')}",  # 获取到的设备信息
-                                                style={
-                                                    "margin": "0",
-                                                    "fontSize": "14px",
-                                                    "marginRight": "10px"
-                                                },
-                                            ),
-                                            
-                                            DashIconify(
-                                                icon="material-symbols:shutter-speed-minus-outline",  # 使用 Antd 图标
-                                                style={
-                                                    "fontSize": "16px",
-                                                    "marginRight": "5px",
-                                                },
-                                            ), 
-                                            html.P(
-                                                f"{image_data.get('快门速度', '未知')}",  # 获取到的设备信息
-                                                style={
-                                                    "margin": "0",
-                                                    "fontSize": "14px",
-                                                    "marginRight": "10px"
-                                                },
-                                            ),
-                                            
-                                            DashIconify(
-                                                icon="carbon:iso-filled",  # 使用 Antd 图标
-                                                style={
-                                                    "fontSize": "16px",
-                                                    "marginRight": "5px",
-                                                },
-                                            ), 
-                                            html.P(
-                                                f"{image_data.get('ISO', '未知')}",  # 获取到的设备信息
-                                                style={
-                                                    "margin": "0",
-                                                    "fontSize": "14px",
-                                                    "marginRight": "10px"
-                                                },
-                                            ),
-                                        ],
-                                    ),
-                                ],
-                                className="image_meta_item",
-                            ),
-                            html.Div(
-                                [
-                                html.P(
-                                        "地点",  
-                                       className="text_row"
-                                    ),
-                                    html.Div(
-                                        style={
-                                            "display": "flex",
-                                            "alignItems": "center",
-                                        },
-                                        children=[
-                                            DashIconify(
-                                                icon="fa6-solid:map-location",  # 使用 Antd 图标
-                                                style={
-                                                    "fontSize": "16px",
-                                                    "marginRight": "5px",
-                                                },
-                                            ), 
-                                            html.P(
-                                                f"{album_name}",  # 获取到的设备信息
-                                                style={
-                                                    "margin": "0",
-                                                    "fontSize": "14px",
-                                                },
-                                            ),
-                                        ],
-                                    ),
-                                ],className="image_meta_item"
-                            ),
-                            html.Div(
-                              [
-                                html.P(
-                                        "镜头",  # 第一排放两个字“相机”
-                                       className="text_row"
-                                    ),
-                                    html.Div(
-                                        style={
-                                            "display": "flex",
-                                            "alignItems": "center",
-                                        },
-                                        children=[
-                                            DashIconify(
-                                                icon="arcticons:lensa",  # 使用 Antd 图标
-                                                style={
-                                                    "fontSize": "16px",
-                                                    "marginRight": "5px",
-                                                },
-                                            ), 
-                                            html.P(
-                                                f"{image_data.get('镜头', '未知').split('|')[0]}",  # 获取到的设备信息
-                                                style={
-                                                    "margin": "0",
-                                                    "fontSize": "14px",
-                                                },
-                                            ),
-                                        ],
-                                    ),
-                                ],className="image_meta_item"
-                            ),
-                        ],
-                    ),
-                ]
+                    create_image_metadata(image_data, album_name)
+                ], style={"display": "flex", "flexDirection": "column", "alignItems": "center"},
             ),
             True
         )
 
     return dash.no_update, False
+
+def create_image_metadata(image_data, album_name):
+    return html.Div(
+        [
+            html.Div(
+                [
+                    html.P("相机", className="text_row"),
+                    html.Div(
+                        style={"display": "flex", "alignItems": "center"},
+                        children=[
+                            DashIconify(
+                                icon="solar:camera-broken",
+                                style={"fontSize": "16px", "marginRight": "5px"},
+                            ),
+                            html.P(
+                                f"{image_data.get('设备', '未知')}",
+                                style={"margin": "0", "fontSize": "14px"},
+                            ),
+                        ],
+                    ),
+                ],
+                className="image_meta_item",
+                style={"margin": "0px 20px"},
+            ),
+            html.Div(
+                [
+                    html.P("参数", className="text_row"),
+                    html.Div(
+                        style={"display": "flex", "alignItems": "center"},
+                        children=[
+                            DashIconify(
+                                icon="fluent-mdl2:focal-point",
+                                style={"fontSize": "16px", "marginRight": "5px"},
+                            ),
+                            html.P(
+                                f"{image_data.get('焦距', '未知')}",
+                                style={"margin": "0", "fontSize": "14px", "marginRight": "10px"},
+                            ),
+                            DashIconify(
+                                icon="ion:aperture-outline",
+                                style={"fontSize": "16px", "marginRight": "5px"},
+                            ),
+                            html.P(
+                                f"{image_data.get('光圈', '未知')}",
+                                style={"margin": "0", "fontSize": "14px", "marginRight": "10px"},
+                            ),
+                            DashIconify(
+                                icon="material-symbols:shutter-speed-minus-outline",
+                                style={"fontSize": "16px", "marginRight": "5px"},
+                            ),
+                            html.P(
+                                f"{image_data.get('快门速度', '未知')}",
+                                style={"margin": "0", "fontSize": "14px", "marginRight": "10px"},
+                            ),
+                            DashIconify(
+                                icon="carbon:iso-filled",
+                                style={"fontSize": "16px", "marginRight": "5px"},
+                            ),
+                            html.P(
+                                f"{image_data.get('ISO', '未知')}",
+                                style={"margin": "0", "fontSize": "14px"},
+                            ),
+                        ],
+                    ),
+                ],
+                className="image_meta_item",
+                style={"margin": "0px 20px"},
+
+            ),
+            html.Div(
+                [
+                    html.P("地点", className="text_row"),
+                    html.Div(
+                        style={"display": "flex", "alignItems": "center"},
+                        children=[
+                            DashIconify(
+                                icon="fa6-solid:map-location",
+                                style={"fontSize": "16px", "marginRight": "5px"},
+                            ),
+                            html.P(
+                                f"{album_name}",
+                                style={"margin": "0", "fontSize": "14px"},
+                            ),
+                        ],
+                    ),
+                ],
+                className="image_meta_item",
+                style={"margin": "0px 20px"},
+            ),
+            html.Div(
+                [
+                    html.P("镜头", className="text_row"),
+                    html.Div(
+                        style={"display": "flex", "alignItems": "center"},
+                        children=[
+                            DashIconify(
+                                icon="arcticons:lensa",
+                                style={"fontSize": "16px", "marginRight": "5px"},
+                            ),
+                            html.P(
+                                f"{image_data.get('镜头', '未知').split('|')[0]}",
+                                style={"margin": "0", "fontSize": "14px"},
+                            ),
+                        ],
+                    ),
+                ],
+                className="image_meta_item",
+                style={"margin": "0px 20px"},
+            ),
+        ],
+        style={
+            "display": "flex",
+            "flexWrap": "wrap",
+            "alignItems": "center",
+            "justifyContent": "center",
+            "padding": "20px",
+            "background": "rgba(0, 0, 0, 0.0)",
+            "borderRadius": "8px"
+        },
+    )

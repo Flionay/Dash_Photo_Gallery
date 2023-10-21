@@ -13,21 +13,50 @@
     margin-right: 20px;
 }
 
-.navbar .option {
-    margin: 0 15px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: color 0.3s;
-}
-
-.navbar .option:hover {
-    color: #ff9800; /* 悬停时的颜色变化 */
+/* 自定义 AntdMenu 被选中项的样式 */
+.ant-menu-title-content{
+    /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);  添加阴影效果 */
+    background-color: transparent;  /* 去掉背景色 */
+    font-size: 19px;  /* 增加字体大小 */
+    color: gray;  /* 被选中项使用黑色字体 */
 }
 
 
+/* 自定义 AntdMenu 被选中项的样式 */
+.ant-menu-title-content {
+    /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);  添加阴影效果 */
+    /* background-color: transparent;  去掉背景色 */
+    font-size: 15px; 
+    color: gray; 
+}
 
+/* 自定义未选中项的样式 */
+.ant-menu-item-selected a{
+    color: black !important;  
+    font-size: 18px;  /* 增加字体大小 */
+}
 
+.ant-menu-item-active a{
+    color: black !important;  
+    font-size: 18px;  /* 增加字体大小 */
+    border-bottom-width: 0px !important;
+}
+.ant-menu-overflow-item::after{
+    border-bottom-width: 0px !important;
+}
+.ant-menu-item::after{
+    border-bottom-width: 0px !important;
+}
+.ant-menu-item-selected::after{
+    border-bottom-width: 0px !important;
+}
+.ant-menu-item-active::after{
+    border-bottom-width: 0px !important;
+}
 
+.ant-menu-light {  
+    background-color: transparent !important;
+}
 
 .image_meta_item {
     display: block;
@@ -48,6 +77,17 @@
     margin-bottom: 5px;
     
 }
+
+.text_row_gray {
+    margin: 0;
+    font-size: 12px;
+    color: gray;
+    /* font-weight: bold; */
+    text-align: center;
+    margin-bottom: 5px;
+    
+}
+
 
 .ant-modal .ant-modal-content {
     background-color: rgba(248, 240, 240, 0.2) !important;

@@ -7,6 +7,7 @@ import datetime
 from fractions import Fraction  
 
 def get_exif_data(image_url):
+    print("输入的url",image_url)
     # 假设远程 JSON 文件的 URL 是固定的
     json_url = "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/exif_data.json"  # 替换为实际的 JSON 文件 URL
     try:
@@ -16,11 +17,15 @@ def get_exif_data(image_url):
 
         # 根据 image_url 获取对应的 EXIF 数据
         position = '/'.join(image_url.split('/')[-2:]).split('.')[0]  # 只提取文件名，不添加扩展名
-        print(position)
+        
         # 假设 JSON 数据的结构是一个字典，键是图片 URL，值是对应的 EXIF 数据
+        parsed_exif = {}
         for key,value in exif_data.items():
             if key.startswith(position):
                 parsed_exif = value
+
+            
+        # print("匹配的图片",position,"匹配到的EXIF数据",parsed_exif)
         #parsed_exif = {key: value for key, value in exif_data.items() if key.startswith(position)}  
         if not parsed_exif:  # 如果没有找到匹配的 EXIF 数据，返回空字典
             return {}
@@ -105,10 +110,10 @@ if __name__ == "__main__":
     exif_data = { 'GPSInfo': "{0: b'\\x02\\x03\\x00\\x00', 5: b'\\x00', 8: '', 9: '', 10: ''}" }
 
     # 解析 GPSInfo
-    gps_info_str = exif_data['GPSInfo']
-    gps_info_dict = ast.literal_eval(gps_info_str)
+    # gps_info_str = exif_data['GPSInfo']
+    # gps_info_dict = ast.literal_eval(gps_info_str)
 
-    # 输出解析后的字典
-    print(gps_info_dict.get(2).decode())
-    # info = get_exif_data("https://angyi.oss-cn-beijing.aliyuncs.com/gallery/东方明珠/DSC04056.webp")
-    # print(info)
+    # # 输出解析后的字典
+    # print(gps_info_dict.get(2).decode())
+    info = get_exif_data("https://angyi.oss-cn-beijing.aliyuncs.com/gallery/北京/IMG_3003.webp")
+    print(info)

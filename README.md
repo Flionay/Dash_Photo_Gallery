@@ -35,4 +35,7 @@
    https://angyi.oss-cn-beijing.aliyuncs.com/uPic/2024/iShot_2024-09-18_21.07.57.png
 
 
-
+## TODO
+1. 添加评分，精选按照评分排序，服务器端分页渲染
+2. 添加地图，地图上显示图片位置，点击图片显示图片信息
+3. 添加github项目链接
