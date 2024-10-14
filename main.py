@@ -105,6 +105,49 @@ def album_card_style(is_dark_mode):
         }
     
     return card_style
+@app.callback(
+    [Output('navbar', 'children')],
+    [Input('url', 'pathname')]
+)
+def update_navbar(pathname):
+    if pathname == '/':
+        return [html.Div([
+            fac.AntdImage(
+                src=config.LOGO_PATH,
+                preview=False,
+                style={
+                    'height': '30px',
+                    'width': '30px',
+                    'borderRadius': '50%',
+                    'overflow': 'hidden',
+                    'marginRight': '10px'
+                }
+            ),
+            html.Span('Photo Gallery', style={'fontSize': '20px'}),
+            fac.AntdSwitch(
+                id='theme-switch',
+                checkedChildren='🌙',
+                unCheckedChildren='☀️',
+                style={'marginLeft': 'auto'}
+            )
+        ], style={'display': 'flex', 'alignItems': 'center', 'width': '100%'})]
+    else:
+        album_name = unquote(pathname.strip('/'))
+        return [html.Div([
+            fac.AntdBreadcrumb(
+                items=[
+                    {'title': '主页', 'href': '/'},
+                    {'title': album_name}
+                ],
+                style={'marginBottom': '0'}
+            ),
+            fac.AntdSwitch(
+                id='theme-switch',
+                checkedChildren='🌙',
+                unCheckedChildren='☀️',
+                style={'marginLeft': 'auto'}
+            )
+        ], style={'display': 'flex', 'alignItems': 'center', 'width': '100%'})]
 
 @app.callback(
     Output('page-content', 'children'),
@@ -118,24 +161,22 @@ def display_page(pathname, is_dark_mode):
 
     if pathname == '/':
         return html.Div([
-            dcc.Link(
+            dcc.Link([
                 fac.AntdCard(
-                    [
-                        html.Div(album['title'], style={'fontSize': '18px', 'fontWeight': 'bold', 'marginBottom': '10px'}),
-                        fac.AntdImage(
-                            src=album['images'][0],
-                            preview=False,
-                            style={'width': '100%', 'height':'200px','borderRadius': '8px'}
+                        fac.AntdCardMeta(
+                            description=album['desc'],
+                            title=album['title'],
                         ),
-                        html.Div([
-                            html.P(album['desc'], style={'margin': '5px 0', 'fontSize': '12px'}),
-                            html.P(f"{len(album['images'])} 张图片", style={'margin': '5px 0', 'fontSize': '12px', 'color': '#888'}),
-                        ], style={'padding': '10px'})
-                    ],
-                    hoverable=True,
-                    style={**card_style, 'width': '300px', 'height': '400px', 'margin': '10px', 'display': 'inline-block'}
-                ),
-                href=f'/{album_name}'
+                        coverImg={
+                            'alt': 'demo picture',
+                            'src': album['images'][0],
+                        },
+                        hoverable=True,
+                        style={**card_style, 'height': '400px', 'margin': '10px', 'display': 'inline-block'},
+                        headStyle={'display':'none'},
+                )
+            ],
+            href=f'/{album_name}'
             )
             for album_name, album in albums_data.items()
         ], style={'display': 'grid', 'gridTemplateColumns': 'repeat(auto-fill, minmax(300px, 1fr))', 'gap': '20px', 'justifyContent': 'center'})
@@ -144,20 +185,28 @@ def display_page(pathname, is_dark_mode):
         if album_name in albums_data:
             album = albums_data[album_name]
             return html.Div([
-                html.H2(album['title']),
-                html.P(album['desc']),
-                html.Div([
-                    fac.AntdImage(
-                        src=image_url,
-                        preview=True,
-                        style={'maxWidth': '100%', 'margin': '10px'}
-                    )
-                    for image_url in album['images']
-                ], style={'display': 'flex', 'flexWrap': 'wrap', 'justifyContent': 'center'})
+                html.H2(album['title'], style={'textAlign': 'center'}),
+                html.P(album['desc'], style={'textAlign': 'center', 'marginBottom': '40px'}),
+                fac.AntdRow(
+                    [
+                        fac.AntdCol(
+                            fac.AntdImage(
+                                src=image_url,
+                                preview=True,
+                                style={'width': '100%', 'marginBottom': '10px'}
+                            ),
+                            span=6  # 这里可以根据需要调整列宽
+                        )
+                        for image_url in album['images']
+                    ],
+                    gutter=[16, 16],  # 设置网格间距
+                    justify='center'
+                )
             ])
         else:
             return html.Div("相册未找到", style={'color': 'red'})
-
+        
+        
 
 if __name__ == '__main__':
     app.run_server(debug=True)
