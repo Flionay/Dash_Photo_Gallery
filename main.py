@@ -149,6 +149,19 @@ def update_navbar(pathname):
             )
         ], style={'display': 'flex', 'alignItems': 'center', 'width': '100%'})]
 
+
+# @app.callback(
+#     Output('url', 'pathname'),
+#     [Input('page-content', 'n_clicks')],
+#     [State('url', 'pathname')]
+# )
+# def update_url(n_clicks, pathname):
+#     if n_clicks:
+#         # 假设图片ID是从点击事件中获取的
+#         image_id = 'some_image_id'  # 需要根据实际情况获取
+#         return f'/相册/{image_id}'
+#     return pathname
+
 @app.callback(
     Output('page-content', 'children'),
     [Input('url', 'pathname'), Input('theme-status', 'data')]
@@ -180,31 +193,102 @@ def display_page(pathname, is_dark_mode):
             )
             for album_name, album in albums_data.items()
         ], style={'display': 'grid', 'gridTemplateColumns': 'repeat(auto-fill, minmax(300px, 1fr))', 'gap': '20px', 'justifyContent': 'center'})
+    
+    # elif pathname.startswith('/相册/'):
+    #     image_id = pathname.split('/')[-1]
+    #     # 假设从数据中获取图片信息
+    #     image_data = get_image_data(image_id)  # 需要实现此函数
+    #     return html.Div([
+    #         html.Div([
+    #             html.Div([
+    #                 html.Img(id='main-image', src=image_data['src'], style={'width': '100%'}),
+    #                 html.Div([
+    #                     html.Img(src=thumb, style={'width': '20%', 'cursor': 'pointer'})
+    #                     for thumb in image_data['thumbnails']  # 显示缩略图
+    #                 ], style={'display': 'flex', 'justifyContent': 'center', 'marginTop': '10px'})
+    #             ], style={'width': '70%', 'display': 'inline-block'}),
+    #             html.Div([
+    #                 html.P(f"拍摄设备: {image_data['device']}"),
+    #                 html.P(f"光圈: {image_data['aperture']}"),
+    #                 html.P(f"快门速度: {image_data['shutter_speed']}"),
+    #                 html.P(f"焦距: {image_data['focal_length']}"),
+    #                 html.P(f"ISO: {image_data['iso']}"),
+    #                 html.P(f"拍摄时间: {image_data['date_time']}"),
+    #                 html.P(f"地点: {image_data['location']}"),
+    #                 html.P(f"版权: {image_data['copyright']}")
+    #             ], style={'width': '30%', 'display': 'inline-block', 'verticalAlign': 'top'})
+    #         ], style={'display': 'flex'}),
+    #         html.Div([
+    #             html.Button('上一张', id='prev-button'),
+    #             html.Button('下一张', id='next-button')
+    #         ], style={'textAlign': 'center', 'marginTop': '20px'})
+    #     ])
+    
     else:
+        image_data={
+            "src": "https://angyi.oss-cn-beijing.aliyuncs.com/uPic/2024/iShot_2024-09-14_14.48.01.png",
+            "thumbnails": ["https://picsum.photos/200/300", "https://picsum.photos/200/300", "https://picsum.photos/200/300"],
+            "device": "Canon EOS R5",
+            "aperture": "f/2.8",
+            "shutter_speed": "1/200",
+            "focal_length": "50mm",
+            "iso": "100",
+            "date_time": "2022-01-01 12:00:00",
+            "location": "Tokyo, Japan",
+            "copyright": "©️ 2022 John Doe"
+        }
         album_name = unquote(pathname.strip('/'))
-        if album_name in albums_data:
-            album = albums_data[album_name]
-            return html.Div([
-                html.H2(album['title'], style={'textAlign': 'center'}),
-                html.P(album['desc'], style={'textAlign': 'center', 'marginBottom': '40px'}),
-                fac.AntdRow(
-                    [
-                        fac.AntdCol(
-                            fac.AntdImage(
-                                src=image_url,
-                                preview=True,
-                                style={'width': '100%', 'marginBottom': '10px'}
-                            ),
-                            span=6  # 这里可以根据需要调整列宽
-                        )
-                        for image_url in album['images']
-                    ],
-                    gutter=[16, 16],  # 设置网格间距
-                    justify='center'
-                )
-            ])
-        else:
-            return html.Div("相册未找到", style={'color': 'red'})
+    if album_name in albums_data:
+        album = albums_data[album_name]
+        return html.Div([
+            html.H2(album['title'], style={'textAlign': 'center'}),
+            html.P(album['desc'], style={'textAlign': 'center', 'marginBottom': '40px'}),
+            fac.AntdRow(
+                [
+                    fac.AntdCol(
+                        fac.AntdImage(
+                            src=image_url,
+                            preview=True,
+                            id='image-card',
+                            toolbarExtra=[
+                                html.Div([
+                                    html.Div([
+                                        html.P(f"拍摄设备: {image_data['device']}"),
+                                        html.P(f"光圈: {image_data['aperture']}"),
+                                        html.P(f"快门速度: {image_data['shutter_speed']}"),
+                                        html.P(f"焦距: {image_data['focal_length']}"),
+                                        html.P(f"ISO: {image_data['iso']}"),
+                                        html.P(f"拍摄时间: {image_data['date_time']}"),
+                                        html.P(f"地点: {image_data['location']}"),
+                                        html.P(f"版权: {image_data['copyright']}")
+                                    ], style={
+                                        'width': '100%',
+                                        'padding': '10px',
+                                        'backgroundColor': 'rgba(255, 255, 255, 0.8)',  # 毛玻璃效果
+                                        'backdropFilter': 'blur(10px)',  # 毛玻璃效果
+                                        'borderRadius': '8px',
+                                        'boxShadow': '0 4px 8px rgba(0, 0, 0, 0.1)',
+                                        'textAlign': 'left'
+                                    })
+                                ])
+                            ],
+                            style={
+                                'width': '100%',
+                                'marginBottom': '10px',
+                                'marginLeft': 'auto',  # 向左移动
+                                'marginRight': 'auto'
+                            }
+                        ),
+                        span=6  # 这里可以根据需要调整列宽
+                    )
+                    for image_url in album['images']
+                ],
+                gutter=[16, 16],  # 设置网格间距
+                justify='center'
+            )
+        ])
+    else:
+        return html.Div("相册未找到", style={'color': 'red'})
         
         
 
