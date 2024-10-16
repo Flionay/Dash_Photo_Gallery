@@ -1,8 +1,8 @@
 {
     "上海": {
         "images": [
-            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/上海/DSC03640.webp",
-            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/上海/DSC03641.webp"
+            "https://vj-prod-website-cms.s3.ap-southeast-1.amazonaws.com/c1-1716176540224.jpg",
+            "https://content.skyscnr.com/m/05b18ae06b6669d4/original/GettyImages-465535964.jpg"
         ],
         "title": "上海之旅",
         "location": "121.4992, 31.2397",
@@ -11,13 +11,12 @@
     },
     "苏州": {
         "images": [
-            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/苏州/731A1021.webp",
-            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/苏州/DSC04283.webp",
-            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/苏州/DSC04292.webp",
-            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/苏州/DSC04293.webp",
-            "https://angyi.oss-cn-beijing.aliyuncs.com/uPic/2024/iShot_2024-09-18_21.06.01.png",
-            "https://angyi.oss-cn-beijing.aliyuncs.com/uPic/2024/1RAW4e.png",
-            "https://angyi.oss-cn-beijing.aliyuncs.com/uPic/2024/iShot_2024-09-14_14.48.01.png"
+            "https://images.unsplash.com/photo-1728643883347-af8870cecef8?q=80&w=2729&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "https://sitecore-cd.shangri-la.com/-/media/Shangri-La/suzhou_shangrila/about/220610_Attractionsbanner.jpg",
+            "https://sitecore-cd.shangri-la.com/-/media/Shangri-La/suzhou_shangrila/about/220610_Arts-and-Culturebanner.jpg",
+            "https://images.unsplash.com/photo-1520941911699-d1023ca7be1d?q=80&w=2365&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                    "https://sitecore-cd.shangri-la.com/-/media/Shangri-La/suzhou_shangrila/about/220610_Arts-and-Culturebanner.jpg",
+            "https://images.unsplash.com/photo-1520941911699-d1023ca7be1d?q=80&w=2365&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         ],
         "title": "苏州之旅",
         "location": "120.6312, 31.3243",
