@@ -5,11 +5,19 @@ from watchdog.events import FileSystemEventHandler
 from PIL import Image, ExifTags
 import oss2
 import shutil
+from dotenv import load_dotenv
 
+# 加载 .env 文件中的环境变量
+load_dotenv()
 
+# 读取密钥
+oss_access_key = os.getenv('OSS_ACCESS_KEY')
+oss_secret_key = os.getenv('OSS_SECRET_KEY')
+oss_endpoint = os.getenv('OSS_ENDPOINT')
+oss_bucket = os.getenv('OSS_BUCKET')
 # 阿里云OSS配置
-auth = oss2.Auth('LTAI5tQ2j1kpp1YsKBJuC6iJ', 'z49aq2jux9xVhoAWXTxza7xSBILuyQ')
-bucket = oss2.Bucket(auth, 'https://oss-cn-beijing.aliyuncs.com', 'angyi')
+auth = oss2.Auth(oss_access_key,oss_secret_key)
+bucket = oss2.Bucket(auth, oss_endpoint, oss_bucket)
 
 class Watcher:
     DIRECTORY_TO_WATCH = "./gallery"
@@ -109,31 +117,3 @@ if __name__ == '__main__':
     w = Watcher()
     w.run()
     
-
-    # # 打开图片
-    # from PIL.ExifTags import TAGS
-    # with Image.open('/Users/angyi/Desktop/前端/photo_gallery/gallery/苏州/DSC04283.JPG') as img:
-    #     # 获取 EXIF 数据
-    #     exif_data = img._getexif()
-        
-
-            
-    #     # 检查并应用EXIF方向信息
-    #     try:
-    #         for orientation in ExifTags.TAGS.keys():
-    #             if ExifTags.TAGS[orientation] == 'Orientation':
-    #                 break
-    #         exif = img._getexif()
-    #         if exif is not None:
-    #             orientation = exif.get(orientation, None)
-    #             if orientation == 3:
-    #                 img = img.rotate(180, expand=True)
-    #             elif orientation == 6:
-    #                 img = img.rotate(270, expand=True)
-    #             elif orientation == 8:
-    #                 img = img.rotate(90, expand=True)
-    #     except (AttributeError, KeyError, IndexError):
-    #         # 如果没有EXIF信息，直接跳过
-    #         pass
-            
-    #     img.save('./test.webp', 'webp', quality=20,exif=img.info.get('exif'))

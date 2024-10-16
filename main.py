@@ -5,37 +5,49 @@ from dash.dependencies import Input, Output, State
 import config
 import json
 from urllib.parse import unquote
+from util import get_exif_data
 
 app = dash.Dash(__name__, suppress_callback_exceptions=True)
 
 # 初始主题
-app.layout = html.Div(
-    id="main-container",
-    children=[
-        dcc.Location(id="url", refresh=False),
-        dcc.Store(id="theme-status"),  # 用于存储当前主题状态
-        dcc.Store(id="albums-data"),  # 用于存储相册数据
-        # 导航栏
-        fac.AntdHeader(
-            id="navbar",
-            style={
-                "backgroundColor": "#f0f2f5",
-                "color": "black",
-                "backgroundImage": "linear-gradient(135deg, #f0f2f5 0%, #ffffff 100%)",
-                "padding": "10px",
-                "display": "flex",
-                "alignItems": "center",
-            },
-        ),
-        # 内容区
-        html.Div(id="page-content", style={"padding": "20px", "textAlign": "center"}),
-        fac.AntdModal(id="modal-content", style={"maxWidth": "80%", "margin": "auto"}),
-        dcc.Interval(
-            id="interval-component", interval=6 * 1000, n_intervals=0
-        ),  # 每60秒更新一次
-    ],
-    style={"minHeight": "100vh"},
-)
+app.layout =html.Div([
+    dcc.Location(id="url", refresh=False),
+    dcc.Store(id="theme-status"),  # 用于存储当前主题状态
+    dcc.Store(id="albums-data"),  # 用于存储相册数据
+    
+    html.Div(
+        id="main-container",
+        children=[
+
+            # 导航栏
+            fac.AntdHeader(
+                id="navbar",
+                style={
+                    "backgroundColor": "#f0f2f5",
+                    "color": "black",
+                    "backgroundImage": "linear-gradient(135deg, #f0f2f5 0%, #ffffff 100%)",
+                    "padding": "10px",
+                    "display": "flex",
+                    "alignItems": "center",
+                },
+            ),
+            # 内容区
+            html.Div(id="page-content", style={"padding": "20px", "textAlign": "center"}),
+            fac.AntdModal(id="modal-content", style={"maxWidth": "80%", "margin": "auto"}),
+            dcc.Interval(
+                id="interval-component", interval=60 * 1000, n_intervals=0
+            ),  # 每60秒更新一次
+        ],
+        style={
+            "minHeight": "100vh",
+            "overflow": "hidden",  # 防止内容溢出
+            "display": "flex",  # 使用 flexbox 布局
+            "flexDirection": "column",  # 垂直排列
+        },
+    )
+])
+
+
 
 
 # 定时更新 JSON 数据的回调
@@ -106,6 +118,7 @@ def album_card_style(is_dark_mode):
             "border": "none",  # 去掉边框
             "borderRadius": "8px",
             "color": "white",  # 文字颜色为白色
+            "transition": "all 0.3s ease",
         }
     else:
         card_style = {
@@ -113,13 +126,14 @@ def album_card_style(is_dark_mode):
             "boxShadow": "0 4px 8px rgba(0, 0, 0, 0.1)",  # 原有的阴影
             "borderRadius": "8px",
             "color": "black",  # 文字颜色为黑色
+            "transition": "all 0.3s ease",
         }
 
     return card_style
 
 
-@app.callback([Output("navbar", "children")], [Input("url", "pathname")])
-def update_navbar(pathname):
+@app.callback([Output("navbar", "children")], [Input("url", "pathname"), Input("theme-status", "data")])
+def update_navbar(pathname, is_dark_mode):
     if pathname == "/":
         return [
             html.Div(
@@ -138,6 +152,7 @@ def update_navbar(pathname):
                     html.Span("Photo Gallery", style={"fontSize": "20px"}),
                     fac.AntdSwitch(
                         id="theme-switch",
+                        checked=is_dark_mode,
                         checkedChildren="🌙",
                         unCheckedChildren="☀️",
                         style={"marginLeft": "auto"},
@@ -170,49 +185,33 @@ def update_navbar(pathname):
 @app.callback(
     [Output("modal-content", "children"), Output("modal-content", "visible")],
     [Input({"type": "image-card", "index": dash.dependencies.ALL}, "n_clicks")],
-    [State("url", "pathname")],
+    [
+        State("albums-data", "data"),
+        State("url", "pathname"),
+    ],
 )
-def show_image_modal(n_clicks_list, pathname):
+def show_image_modal(n_clicks_list, albums_data, pathname):
     if not any(n_clicks_list):
         return dash.no_update, False
-
+    print(n_clicks_list)
     # 获取被点击的图片索引
     clicked_index = n_clicks_list.index(max(n_clicks_list))
 
     album_name = unquote(pathname.strip("/"))
-    with open("albums.json", "r", encoding="utf-8") as f:
-        albums_data = json.load(f)
-
     if album_name in albums_data:
         album = albums_data[album_name]
         image_url = album["images"][clicked_index]
-        image_data = {
-            "device": "Canon EOS R5",
-            "aperture": "f/2.8",
-            "shutter_speed": "1/200",
-            "focal_length": "50mm",
-            "iso": "100",
-            "date_time": "2022-01-01 12:00:00",
-            "location": "Tokyo, Japan",
-            "copyright": "©️ 2022 John Doe",
-        }
+        image_data = get_exif_data(image_url)
         return (
             html.Div(
                 [
                     fac.AntdImage(
-                        src=image_url, style={"width": "100%", "marginBottom": "20px"}
+                        src=image_url,
+                        style={"width": "100%", "marginBottom": "20px"},
+                        preview=False,
                     ),
                     html.Div(
-                        [
-                            html.P(f"设备: {image_data['device']}"),
-                            html.P(f"光圈: {image_data['aperture']}"),
-                            html.P(f"快门速度: {image_data['shutter_speed']}"),
-                            html.P(f"焦距: {image_data['focal_length']}"),
-                            html.P(f"ISO: {image_data['iso']}"),
-                            html.P(f"拍摄时间: {image_data['date_time']}"),
-                            html.P(f"地点: {image_data['location']}"),
-                            html.P(f"版权: {image_data['copyright']}"),
-                        ],
+                        [html.P(f"{key}: {item}") for key, item in image_data.items()],
                         style={"textAlign": "left"},
                     ),
                 ]
@@ -246,6 +245,10 @@ def create_image_card(image_url, index):
     ],
 )
 def display_page(pathname, is_dark_mode, albums_data):
+    print('theme',is_dark_mode)
+        # 确保在切换 URL 时保持主题状态
+    if is_dark_mode is None:
+        is_dark_mode = False  # 默认主题为亮色模式
 
     card_style = album_card_style(is_dark_mode=is_dark_mode)
 

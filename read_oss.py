@@ -2,10 +2,20 @@ import oss2
 import yaml
 import json
 from datetime import date
+import os
+from dotenv import load_dotenv
 
-# 初始化OSS客户端
-auth = oss2.Auth('LTAI5tQ2j1kpp1YsKBJuC6iJ', 'z49aq2jux9xVhoAWXTxza7xSBILuyQ')
-bucket = oss2.Bucket(auth, 'oss-cn-beijing.aliyuncs.com', 'angyi')
+# 加载 .env 文件中的环境变量
+load_dotenv()
+
+# 读取密钥
+oss_access_key = os.getenv('OSS_ACCESS_KEY')
+oss_secret_key = os.getenv('OSS_SECRET_KEY')
+oss_endpoint = os.getenv('OSS_ENDPOINT')
+oss_bucket = os.getenv('OSS_BUCKET')
+# 阿里云OSS配置
+auth = oss2.Auth(oss_access_key,oss_secret_key)
+bucket = oss2.Bucket(auth, oss_endpoint, oss_bucket)
 
 # 指定要列出的文件夹
 folder = 'gallery'
