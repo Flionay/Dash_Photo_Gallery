@@ -10,39 +10,39 @@ from util import get_exif_data
 app = dash.Dash(__name__, suppress_callback_exceptions=True)
 
 # 初始主题
-app.layout =html.Div([
+app.layout = html.Div([
     dcc.Location(id="url", refresh=False),
-    dcc.Store(id="theme-status"),  # 用于存储当前主题状态
-    dcc.Store(id="albums-data"),  # 用于存储相册数据
+    dcc.Store(id="theme-status"),
+    dcc.Store(id="albums-data"),
     
     html.Div(
         id="main-container",
         children=[
-
             # 导航栏
             fac.AntdHeader(
                 id="navbar",
                 style={
-                    "backgroundColor": "#f0f2f5",
-                    "color": "black",
-                    "backgroundImage": "linear-gradient(135deg, #f0f2f5 0%, #ffffff 100%)",
-                    "padding": "10px",
+                    "backgroundColor": "#ffffff",  # 使用白色背景
+                    "color": "#333333",  # 深色文本
+                    "padding": "20px 40px",  # 增加内边距
+                    "boxShadow": "0 2px 10px rgba(0, 0, 0, 0.1)",  # 添加阴影
                     "display": "flex",
                     "alignItems": "center",
                 },
             ),
             # 内容区
-            html.Div(id="page-content", style={"padding": "20px", "textAlign": "center"}),
+            html.Div(id="page-content", style={"padding": "40px", "textAlign": "center"}),
             fac.AntdModal(id="modal-content", style={"maxWidth": "80%", "margin": "auto"}),
             dcc.Interval(
                 id="interval-component", interval=60 * 1000, n_intervals=0
-            ),  # 每60秒更新一次
+            ),
         ],
         style={
             "minHeight": "100vh",
-            "overflow": "hidden",  # 防止内容溢出
-            "display": "flex",  # 使用 flexbox 布局
-            "flexDirection": "column",  # 垂直排列
+            "overflow": "hidden",
+            "display": "flex",
+            "flexDirection": "column",
+            "backgroundColor": "#f9f9f9",  # 背景色
         },
     )
 ])
@@ -110,22 +110,23 @@ def toggle_theme(is_dark_mode):
     }
 
 
+# 修改卡片样式
 def album_card_style(is_dark_mode):
     if is_dark_mode:
         card_style = {
-            "backgroundColor": "rgba(40, 40, 40, 0.9)",  # 更深的背景色
-            "boxShadow": "0 4px 8px rgba(0, 0, 0, 0.3)",  # 更柔和的阴影
-            "border": "none",  # 去掉边框
-            "borderRadius": "8px",
-            "color": "white",  # 文字颜色为白色
+            "backgroundColor": "rgba(40, 40, 40, 0.9)",
+            "boxShadow": "0 4px 12px rgba(0, 0, 0, 0.2)",  # 更柔和的阴影
+            "border": "none",
+            "borderRadius": "12px",  # 更圆的边角
+            "color": "white",
             "transition": "all 0.3s ease",
         }
     else:
         card_style = {
-            "backgroundColor": "rgba(255, 255, 255, 0.4)",  # 原有的背景色
-            "boxShadow": "0 4px 8px rgba(0, 0, 0, 0.1)",  # 原有的阴影
-            "borderRadius": "8px",
-            "color": "black",  # 文字颜色为黑色
+            "backgroundColor": "rgba(255, 255, 255, 0.9)",  # 更清新的背景色
+            "boxShadow": "0 4px 12px rgba(0, 0, 0, 0.1)",  # 更柔和的阴影
+            "borderRadius": "12px",
+            "color": "black",
             "transition": "all 0.3s ease",
         }
 
@@ -193,14 +194,24 @@ def update_navbar(pathname, is_dark_mode):
 def show_image_modal(n_clicks_list, albums_data, pathname):
     if not any(n_clicks_list):
         return dash.no_update, False
-    print(n_clicks_list)
+    ctx = callback_context
+    if not ctx.triggered:
+        return dash.no_update, False
+    
+   # 解析 prop_id
+    prop_id = ctx.triggered[0]['prop_id']
     # 获取被点击的图片索引
-    clicked_index = n_clicks_list.index(max(n_clicks_list))
-
+    # print(prop_id[:-9])
+    clicked_image_name = eval(prop_id[:-9])['index']  # 获取 index 的值
+    print(clicked_image_name)
     album_name = unquote(pathname.strip("/"))
     if album_name in albums_data:
         album = albums_data[album_name]
-        image_url = album["images"][clicked_index]
+        for image_u in album['images']:
+            if clicked_image_name in image_u:
+                print(image_u)
+                image_url = image_u
+        # image_url = [image_u for image_u in album["images"] if clicked_image_name in image_u][0] # 获取被点击的图片地址
         image_data = get_exif_data(image_url)
         return (
             html.Div(
