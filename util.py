@@ -31,8 +31,8 @@ def get_exif_data(image_url):
             "ISO": parsed_exif.get("ISOSpeedRatings", "未知"),  # ISO
             "拍摄时间": parsed_exif.get("DateTimeOriginal", parsed_exif.get("DateTime", "未知")),  # 拍摄时间
             "位置": parsed_exif.get("GPSInfo", {}).get(GPSTAGS.get(2, "未知"), "未知") if "GPSInfo" in parsed_exif else "未知",  # 位置
-            "版权": parsed_exif.get("Copyright", "未知"),  # 版权信息
-            "镜头": parsed_exif.get("LensModel", f"© {current_year} Angyi. 保留所有权利。"),  # 镜头型号
+            "版权": parsed_exif.get("Copyright", f"© {current_year} Angyi. 保留所有权利。"),  # 版权信息
+            "镜头": parsed_exif.get("LensModel", "未知"),  # 镜头型号
         }
 
         return image_info

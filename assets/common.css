@@ -1,0 +1,18 @@
+.image_meta_item {
+    display: block;
+    justify-content: center;
+    /* padding: 30px; */
+    /* background: rgba(255, 255, 255, 0.0); 设置背景透明 */
+    border-radius: 8px;
+    /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+    margin-left: 25px;
+}
+
+.image_meta_item .text_row {
+    margin: 0;
+    font-size: 14px;
+    color: rgb(17, 0, 0);
+    /* font-weight: bold; */
+    text-align: center;
+    margin-bottom: 5px;
+}
