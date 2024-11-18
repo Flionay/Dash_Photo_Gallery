@@ -30,7 +30,7 @@ def get_exif_data(image_url):
             "焦距": parsed_exif.get("FocalLength", "未知"),  # 焦距
             "ISO": parsed_exif.get("ISOSpeedRatings", "未知"),  # ISO
             "拍摄时间": parsed_exif.get("DateTimeOriginal", parsed_exif.get("DateTime", "未知")),  # 拍摄时间
-            "位置": parsed_exif.get("GPSInfo", {}).get(GPSTAGS.get(2, "未知"), "未知") if "GPSInfo" in parsed_exif else "未知",  # 位置
+            # "位置": parsed_exif.get("GPSInfo", {}).get(GPSTAGS.get(2, "未知"), "未知") if "GPSInfo" in parsed_exif else "未知",  # 位置
             "版权": parsed_exif.get("Copyright", f"© {current_year} Angyi. 保留所有权利。"),  # 版权信息
             "镜头": parsed_exif.get("LensModel", "未知"),  # 镜头型号
         }
@@ -95,5 +95,16 @@ def get_exif_datat(image_url):
 
 
 if __name__ == "__main__":
-    info = get_exif_data("https://angyi.oss-cn-beijing.aliyuncs.com/gallery/东方明珠/DSC04056.webp")
-    print(info)
+    import ast
+
+    # 原始数据
+    exif_data = { 'GPSInfo': "{0: b'\\x02\\x03\\x00\\x00', 5: b'\\x00', 8: '', 9: '', 10: ''}" }
+
+    # 解析 GPSInfo
+    gps_info_str = exif_data['GPSInfo']
+    gps_info_dict = ast.literal_eval(gps_info_str)
+
+    # 输出解析后的字典
+    print(gps_info_dict.get(2).decode())
+    # info = get_exif_data("https://angyi.oss-cn-beijing.aliyuncs.com/gallery/东方明珠/DSC04056.webp")
+    # print(info)
