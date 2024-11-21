@@ -15,17 +15,21 @@ def get_exif_data(image_url):
         exif_data = response.json()  # 解析 JSON 数据
 
         # 根据 image_url 获取对应的 EXIF 数据
-        position = '/'.join(image_url.split('/')[-2:]).split('.')[0]+'.JPG'
+        position = '/'.join(image_url.split('/')[-2:]).split('.')[0]  # 只提取文件名，不添加扩展名
         print(position)
         # 假设 JSON 数据的结构是一个字典，键是图片 URL，值是对应的 EXIF 数据
-        
-        parsed_exif = exif_data.get(position, {}) 
-        print(parsed_exif)
+        for key,value in exif_data.items():
+            if key.startswith(position):
+                parsed_exif = value
+        #parsed_exif = {key: value for key, value in exif_data.items() if key.startswith(position)}  
+        if not parsed_exif:  # 如果没有找到匹配的 EXIF 数据，返回空字典
+            return {}
+        # print(parsed_exif)
         current_year = datetime.datetime.now().year 
         # 提取所需的 EXIF 信息
         image_info = {
             "设备": parsed_exif.get("Model", "未知设备"),  # 设备型号
-            "光圈": parsed_exif.get("FNumber", "未知"),  # 光圈
+            "光圈": "F/"+parsed_exif.get("FNumber", "未知"),  # 光圈
             "快门速度":format_shutter_speed(parsed_exif.get("ExposureTime", "未知")),  # 快门速度
             "焦距": parsed_exif.get("FocalLength", "未知"),  # 焦距
             "ISO": parsed_exif.get("ISOSpeedRatings", "未知"),  # ISO
@@ -34,7 +38,7 @@ def get_exif_data(image_url):
             "版权": parsed_exif.get("Copyright", f"© {current_year} Angyi. 保留所有权利。"),  # 版权信息
             "镜头": parsed_exif.get("LensModel", "未知"),  # 镜头型号
         }
-
+        print(image_info)
         return image_info
 
     except requests.RequestException as e:

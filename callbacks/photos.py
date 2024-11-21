@@ -13,12 +13,28 @@ from urllib.parse import unquote
 # 在布局中使用 html.Div 包围图片
 def create_image_card(image_url, index):
     return html.Div(
-        fuc.FefferyDiv(
-            fac.AntdImage(
-                src=image_url,
-                preview=False,
-                style={"width": "100%", "height": "100%", "marginBottom": "0px"},
-            ),
+        fuc.FefferyDiv([
+                fac.AntdImage(
+                    src=image_url,
+                    preview=False,
+                    style={"width": "100%", "height": "100%", "marginBottom": "0px"},
+                ),
+                
+                fac.AntdRate(
+                    id={'type': 'rating', 'index': index},
+                    allowHalf=True,
+                    defaultValue=2.5,
+                    style={
+                        "position": "absolute",
+                        "bottom": "10px",
+                        "right": "10px",
+                        "backgroundColor": "rgba(255, 255, 255, 0.3)",
+                        "display": "none",  # 默认隐藏
+                    },
+                # onChange=lambda value: update_rating(value, index)  # 更新评分
+                ),
+            ],
+
             className={
                 "&:hover": {
                     "transform": "scale(1.02)",  # /* 鼠标悬停时放大 5% */
@@ -61,7 +77,7 @@ def album_card_style(is_dark_mode):
 
         
 @app.callback(
-    [Output("modal-content", "children"), Output("modal-content", "visible"),Output("interval-component","disabled")],
+    [Output("modal-content", "children"), Output("modal-content", "visible")],
     [Input({"type": "image-card", "index": dash.dependencies.ALL}, "n_clicks")],
     [
         State("albums-data", "data"),
@@ -70,7 +86,7 @@ def album_card_style(is_dark_mode):
 )
 def show_image_modal(n_clicks_list, albums_data, pathname):
     if not any(n_clicks_list):
-        return dash.no_update, False, False
+        return dash.no_update, False
     ctx = callback_context
     # if not ctx.triggered:
     #     return dash.no_update, False
@@ -290,7 +306,7 @@ def show_image_modal(n_clicks_list, albums_data, pathname):
                     ),
                 ]
             ),
-            True,True
+            True
         )
 
-    return dash.no_update, False, False
+    return dash.no_update, False

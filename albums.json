@@ -2,7 +2,11 @@
     "上海": {
         "images": [
             "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/上海/DSC03640.webp",
-            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/上海/DSC03641.webp"
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/上海/DSC03641.webp",
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/上海/DSC04056.webp",
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/上海/DSC04061.webp",
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/上海/DSC04076.webp",
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/上海/DSC04080.webp"
         ],
         "title": "上海之旅",
         "location": "121.4992, 31.2397",
@@ -21,6 +25,38 @@
         "date": "2024-07-01",
         "desc": "我们的上海之旅，从外滩的日出开始，到南京路的繁华结束。"
     },
+    "北京": {
+        "images": [
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/北京/IMG_2945.webp",
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/北京/IMG_3003.webp",
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/北京/IMG_3208.webp",
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/北京/IMG_3718.webp",
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/北京/IMG_3734.webp"
+        ],
+        "title": "上海之旅",
+        "location": "121.4992, 31.2397",
+        "date": "2024-07-01",
+        "desc": "我们的上海之旅，从外滩的日出开始，到南京路的繁华结束。"
+    },
+    "天津": {
+        "images": [
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/天津/IMG_1890.webp"
+        ],
+        "title": "上海之旅",
+        "location": "121.4992, 31.2397",
+        "date": "2024-07-01",
+        "desc": "我们的上海之旅，从外滩的日出开始，到南京路的繁华结束。"
+    },
+    "山西": {
+        "images": [
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/山西/IMG_0762.webp",
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/山西/IMG_0763_副本.webp"
+        ],
+        "title": "上海之旅",
+        "location": "121.4992, 31.2397",
+        "date": "2024-07-01",
+        "desc": "我们的上海之旅，从外滩的日出开始，到南京路的繁华结束。"
+    },
     "苏州": {
         "images": [
             "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/苏州/731A1021.webp",
@@ -32,5 +68,22 @@
         "location": "120.6312, 31.3243",
         "date": "2024-07-01",
         "desc": "我们的苏州之旅，从苏州园林的精致开始，到苏州博物馆的现代结束。"
+    },
+    "青岛": {
+        "images": [
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/青岛/IMG_1100.webp",
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/青岛/IMG_1306.webp",
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/青岛/IMG_1376.webp",
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/青岛/IMG_1419.webp",
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/青岛/IMG_1434.webp",
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/青岛/IMG_1439.webp",
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/青岛/IMG_1552.webp",
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/青岛/IMG_1594.webp",
+            "https://angyi.oss-cn-beijing.aliyuncs.com/gallery/青岛/IMG_2461.webp"
+        ],
+        "title": "上海之旅",
+        "location": "121.4992, 31.2397",
+        "date": "2024-07-01",
+        "desc": "我们的上海之旅，从外滩的日出开始，到南京路的繁华结束。"
     }
 }

@@ -21,7 +21,7 @@ auth = oss2.Auth(oss_access_key,oss_secret_key)
 bucket = oss2.Bucket(auth, oss_endpoint, oss_bucket)
 
 class Watcher:
-    DIRECTORY_TO_WATCH = "./gallery"
+    DIRECTORY_TO_WATCH = os.getenv('watch_dir')
 
     def __init__(self):
         self.observer = Observer()
