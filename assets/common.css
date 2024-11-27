@@ -90,13 +90,13 @@
 
 
 .ant-modal .ant-modal-content {
-    background-color: rgba(248, 240, 240, 0.2) !important;
+    background-color: rgba(248, 240, 240, 1) !important;
     max-width: 100%;
     padding: 0px;
 }
 
 .ant-modal .ant-modal-body {
-    background-color: rgba(248, 240, 240, 0.2) !important;
+    /* background-color: rgba(248, 240, 240, 0.2) !important; */
     max-width: 100%;
     padding: 0px;
     text-align: center;

@@ -2,6 +2,7 @@ import feffery_antd_components as fac
 import dash
 from dash import html, dcc
 import config
+from dash_iconify import DashIconify
 
 logo = fac.AntdImage(
     id="logo",
@@ -74,6 +75,12 @@ def render_navbar():
                         style={"flex": 1, "margin": "0 15px","borderBottom":"none"},
                     ),
                     theme_switch,
+                    html.A(
+                        DashIconify(icon="logos:github-icon", style={"fontSize": "24px", "color": "#333"}),
+                        href="https://github.com/Flionay/Dash_Photo_Gallery",  # 替换为你的 GitHub 地址
+                        target="_blank",  # 在新标签页中打开
+                        style={"textDecoration": "none", "marginLeft": "17px","display": "flex", "color": "gray"},
+                    )
                 ],
                 style={"display": "flex", "alignItems": "center", "width": "100%"},
             ),

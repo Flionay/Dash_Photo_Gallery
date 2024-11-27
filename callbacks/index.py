@@ -206,7 +206,7 @@ def display_photos(albums_data):
     )
 
 
-# 展示随机图片
+# 展示图片
 def display_photos_random(albums_data):
 
     def get_album_name(image_url):
@@ -214,52 +214,38 @@ def display_photos_random(albums_data):
             if image_url in album["images"]:
                 return album_name
 
-    import random  # 导入随机模块
-
     # 提取所有图片
     all_photos = []
     for album in albums_data.values():
         all_photos.extend(album["images"])
 
-    # all_photos = all_photos[:5]
-    random.shuffle(all_photos)  # 随机打乱图片顺序
-
-    return (
-        fac.AntdSpace(
-            [
-                fuc.FefferyLazyLoad(
-                    html.Div(
-                        fac.AntdSpace(
-                            [
-                                fac.AntdImage(
-                                    src=photo,
-                                    style={
-                                        "width": "100%",
-                                        "maxHeight": "95vh",  # 设置最大高度为视口高度的80%
-                                        # "borderRadius": "2px",    
-                                        "objectFit": "contain",  # 保持比例，适应容器
-                                        "display": "block",  # 使图片为块级元素
-                                        "padding": "0px",  # 自动水平居中
-                                         "boxShadow": "0 4px 18px rgba(0, 0, 0, 0.2)"
-                                    },  # 充满宽度，保持比例
-                                    preview=False,
-                                ),
-                                html.Div(create_image_metadata(
-                                    get_exif_data(photo), get_album_name(photo)
-                                ),style={"margin":"0px 0px 10px 0px","width": "100%"}),  
-                            ],
-                            direction="vertical",
-                        ),
-                        # style={"boxShadow": "0 4px 18px rgba(0, 0, 0, 0.2)",},  
-                    ),
-                    height=1050,
-                    throttle=50,  # 节流防抖延时，单位：毫秒
-                )
-                for photo in all_photos[:5]
-            ],
-            direction="vertical",
-        ),
+    
+    return fac.AntdCarousel(
+        [
+            html.Div([
+                fac.AntdImage(
+                    src=photo,
+                    style={
+                    "width": "100%",
+                    "maxHeight": "75vh",  # 设置最大高度为视口高度的80%
+                    "objectFit": "contain",  # 保持比例，适应容器
+                    "display": "block",  # 使图片为块级元素
+                    "padding": "0px",  # 自动水平居中
+                    # "boxShadow": "0 4px 18px rgba(0, 0, 0, 0.2)",
+                    "marginBottom": "10px"  # 增加底部间距
+                    },  # 充满宽度，保持比例
+                    preview=False,
+                ),
+                html.Div(create_image_metadata(
+                    get_exif_data(photo), get_album_name(photo)
+                    ), style={"margin": "10px 0", "width": "100%"}),  # 增加上下间距
+            ])
+            for photo in all_photos[:5]
+        ],
+        effect='fade',
+        dotPosition="top",
     )
+
 
 
 # 展示相册
@@ -319,7 +305,7 @@ def display_photos_in_album(albums_data, pathname):
     album = albums_data[album_name]
     # 计算每列的图片数量
     num_images = len(album["images"])
-    images_per_column = num_images // 3  # 每列的基本���片数量
+    images_per_column = num_images // 3  # 每列的基本片数量
     remainder = num_images % 3  # 余数
     print(remainder)
     # 初始化列
@@ -399,6 +385,10 @@ def display_map_page(albums_data):
         zoom=5,  # 设置初始缩放等级为 4
         dragging=False,
         doubleClickZoom=False,
+        #doubleClickZoom=False,
+        # dragging=False,
+        zoomControl=False,
+        scrollWheelZoom=False,
         style={
             'height': '100%',  # 设置高度为100%
             'width': '100%'    # 设置宽度为100%
@@ -409,7 +399,7 @@ def display_map_page(albums_data):
     return html.Div([
         # sidebar,
         map_component
-    ], style={"position": "relative", "height": "100vh", "width": "100%"})  # 确保父容器宽度为100%
+    ], style={"position": "relative", "height": "90vh", "width": "100%"})  # 确保父容器宽度为100%
 
 
 # 根据url显示不同页面

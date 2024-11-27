@@ -95,40 +95,48 @@ def show_image_modal(n_clicks_list, albums_data, pathname):
     # 获取被点击的图片索引
     # print(prop_id[:-9])
     clicked_image_name = eval(prop_id[:-9])["index"]  # 获取 index 的值
-    print(clicked_image_name)
+    print(clicked_image_name,'被点击了')
     album_name = unquote(pathname.strip("/"))
-    if album_name in albums_data:
-        album = albums_data[album_name]
+    for album in albums_data.values():
         for image_u in album["images"]:
             if clicked_image_name in image_u:
                 print(image_u)
                 image_url = image_u
-        # image_url = [image_u for image_u in album["images"] if clicked_image_name in image_u][0] # 获取被点击的图片地址
-        image_data = get_exif_data(image_url)
-        return (
-            html.Div(
-                [
-                    fac.AntdImage(
-                        src=image_url,
-                        style={
-                            "width": "100%",
-                            "maxHeight": "80vh",  # 设置最大高度为视口高度的80%
-                            "borderRadius": "8px",
-                            "objectFit": "contain",  # 保持比例，适应容器
-                            "display": "block",  # 使图片为块级元素
-                            "padding": "20px",  # 自动水平居中
-                        },  # 充满宽度，保持比例
-                        preview=False,
-                    ),
-                    create_image_metadata(image_data, album_name)
-                ], style={"display": "flex", "flexDirection": "column", "alignItems": "center"},
-            ),
-            True
-        )
+                break  # 找到后可以退出循环
+        else:
+            continue  # 如果没有找到，继续下一个相册
+        break  # 找到后退出外层循环
+    # image_url = [image_u for image_u in album["images"] if clicked_image_name in image_u][0] # 获取被点击的图片地址
+    image_data = get_exif_data(image_url)
+    print(image_data)
+    return (
+        html.Div(
+            [
+                fac.AntdImage(
+                    src=image_url,
+                    style={
+                        "width": "100%",
+                        "maxHeight": "80vh",  # 设置最大高度为视口高度的80%
+                        "borderRadius": "8px",
+                        "objectFit": "contain",  # 保持比例，适应容器
+                        "display": "block",  # 使图片为块级元素
+                        "padding": "20px",  # 自动水平居中
+                    },  # 充满宽度，保持比例
+                    preview=False,
+                ),
+                create_image_metadata(image_data, album_name)
+            ], style={"display": "flex", "flexDirection": "column", "alignItems": "center"},
+        ),
+        True
+    )
 
     return dash.no_update, False
 
 def create_image_metadata(image_data, album_name):
+    location = image_data.get('位置', '未知')
+    print(location)
+    if location == "未知":
+        location = album_name
     return html.Div(
         [
             html.Div(
@@ -207,7 +215,7 @@ def create_image_metadata(image_data, album_name):
                                 style={"fontSize": "16px", "marginRight": "5px"},
                             ),
                             html.P(
-                                f"{album_name}",
+                                f"{location}",
                                 style={"margin": "0", "fontSize": "14px"},
                             ),
                         ],

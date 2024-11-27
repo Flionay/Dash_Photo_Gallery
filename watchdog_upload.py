@@ -8,6 +8,7 @@ import shutil
 from dotenv import load_dotenv
 import exifread
 import json
+import uuid
 # 加载 .env 文件中的环境变量
 load_dotenv()
 
@@ -45,7 +46,7 @@ class Handler(FileSystemEventHandler):
             self.process(Watcher.DIRECTORY_TO_WATCH)
 
     def process(self, directory_path):
-        # 处理图片
+        # 处理图片 并保存EXIF信息
         output_dir = "./output"
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)

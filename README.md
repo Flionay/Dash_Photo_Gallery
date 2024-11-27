@@ -1,38 +1,3 @@
-## Dash_Photo_Gallery
-
-### 设计方案
-
-​	数据存储：阿里云oss
-
-​    前端：github dash
-
-​    缩略图&图片压缩： 阿里云 云函数 处理
-
-
-
-## NAS 管理摄影gallery的文件后端
-
-
-
-
-
-
-1. 使用一个监控文件服务，每隔15min监控文件目录是否发生改变，如果发生了改变
-
-   a. 处理图片，如果已经处理过就不动了
-
-   b. 将压缩后的webp文件上传oss，文件目录不动，每个文件夹下有_intro.yaml 介绍这个album的说明，日期，和经纬度
-
-2. 罗列`oss bucket`去生成数据库json
-3. 利用json进行dash渲染
-   
-
-   https://angyi.oss-cn-beijing.aliyuncs.com/uPic/2024/iShot_2024-09-18_21.07.57.png
-
-
-
-
-
 # Dash Photo Gallery
 
 ## 项目简介
@@ -68,7 +33,7 @@ Dash Photo Gallery 是一个基于 Dash 框架的摄影作品展示平台，旨�
 
 4. **地图展示**：在地图上显示图片位置，点击图片可查看详细信息。
 
-
+5. **明暗主题切换**：支持明暗主题切换
 
 ## TODO
 1. 添加评分，精选按照评分排序，服务器端分页渲染
