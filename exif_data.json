@@ -9,7 +9,8 @@
         "Latitude": null,
         "Longitude": null,
         "DateTime": "2024:04:04 18:03:45",
-        "Location": "未知"
+        "Location": "未知",
+        "star": 4
     },
     "上海/DSC04061.JPG": {
         "CameraModel": "ZV-E10",
@@ -21,7 +22,8 @@
         "Latitude": null,
         "Longitude": null,
         "DateTime": "2024:04:04 18:00:28",
-        "Location": "未知"
+        "Location": "未知",
+        "star": 1.5
     },
     "上海/DSC04080.JPG": {
         "CameraModel": "ZV-E10",
@@ -33,7 +35,8 @@
         "Latitude": null,
         "Longitude": null,
         "DateTime": "2024:04:04 18:04:23",
-        "Location": "未知"
+        "Location": "未知",
+        "star": 3.5
     },
     "上海/DSC04056.JPG": {
         "CameraModel": "ZV-E10",
@@ -45,7 +48,8 @@
         "Latitude": null,
         "Longitude": null,
         "DateTime": "2024:04:04 17:59:54",
-        "Location": "未知"
+        "Location": "未知",
+        "star": 4
     },
     "青岛/IMG_1594.jpeg": {
         "CameraModel": "iPhone 11",
@@ -57,7 +61,8 @@
         "Latitude": 36.05469444444444,
         "Longitude": 120.33989722222222,
         "DateTime": "2021:09:13 18:36:06",
-        "Location": "未知"
+        "Location": "未知",
+        "star": 2.5
     },
     "青岛/IMG_1306.jpeg": {
         "CameraModel": "iPhone 11",
@@ -69,7 +74,8 @@
         "Latitude": 36.676766666666666,
         "Longitude": 117.0223,
         "DateTime": "2021:07:10 09:20:23",
-        "Location": "山东 · 历下区· 泉城路街道"
+        "Location": "山东 · 历下区· 泉城路街道",
+        "star": 3
     },
     "青岛/IMG_1100.jpeg": {
         "CameraModel": "iPhone 11",
@@ -81,7 +87,8 @@
         "Latitude": 36.122769444444444,
         "Longitude": 120.47925555555555,
         "DateTime": "2021:05:28 11:58:49",
-        "Location": "山东 · 崂山区· 金家岭街道"
+        "Location": "山东 · 崂山区· 金家岭街道",
+        "star": 2.5
     },
     "青岛/IMG_1439.jpeg": {
         "CameraModel": "iPhone 11",
@@ -93,7 +100,8 @@
         "Latitude": 36.12190277777778,
         "Longitude": 120.47946944444445,
         "DateTime": "2021:08:07 12:40:08",
-        "Location": "山东 · 崂山区· 金家岭街道"
+        "Location": "山东 · 崂山区· 金家岭街道",
+        "star": 2.5
     },
     "青岛/IMG_1419.jpeg": {
         "CameraModel": "iPhone 11",
@@ -105,7 +113,8 @@
         "Latitude": 36.05506111111111,
         "Longitude": 120.33966111111111,
         "DateTime": "2021:08:05 12:06:56",
-        "Location": "未知"
+        "Location": "未知",
+        "star": 2.5
     },
     "青岛/IMG_2461.JPG": {
         "CameraModel": "vivo X60",
@@ -117,7 +126,8 @@
         "Latitude": 0.0,
         "Longitude": 0.0,
         "DateTime": "2022:05:27 17:53:42",
-        "Location": "未知"
+        "Location": "未知",
+        "star": 2
     },
     "青岛/IMG_1376.jpeg": {
         "CameraModel": "iPhone 11",
@@ -129,7 +139,8 @@
         "Latitude": 36.05687222222222,
         "Longitude": 120.33724166666666,
         "DateTime": "2021:07:21 17:45:47",
-        "Location": "山东 · 市南区· 八大关街道"
+        "Location": "山东 · 市南区· 八大关街道",
+        "star": 2.5
     },
     "青岛/IMG_1434.jpeg": {
         "CameraModel": "iPhone 11",
@@ -141,7 +152,8 @@
         "Latitude": 36.056911111111106,
         "Longitude": 120.3359611111111,
         "DateTime": "2021:08:05 12:17:47",
-        "Location": "山东 · 市南区· 八大关街道"
+        "Location": "山东 · 市南区· 八大关街道",
+        "star": 2.5
     },
     "青岛/IMG_1552.jpeg": {
         "CameraModel": "iPhone 11",
@@ -153,7 +165,8 @@
         "Latitude": 36.052825,
         "Longitude": 120.34027222222221,
         "DateTime": "2021:09:01 18:49:40",
-        "Location": "未知"
+        "Location": "未知",
+        "star": 4
     },
     "山西/IMG_0763_副本.jpeg": {
         "CameraModel": "iPhone 11",
@@ -165,7 +178,8 @@
         "Latitude": 37.9047,
         "Longitude": 112.86393055555556,
         "DateTime": "2021:03:01 08:45:46",
-        "Location": "山西 · 寿阳县· 平头镇"
+        "Location": "山西 · 寿阳县· 平头镇",
+        "star": 3
     },
     "山西/IMG_0762.jpeg": {
         "CameraModel": "iPhone 11",
@@ -177,7 +191,8 @@
         "Latitude": 37.90468333333333,
         "Longitude": 112.86393055555556,
         "DateTime": "2021:03:01 08:45:40",
-        "Location": "山西 · 寿阳县· 平头镇"
+        "Location": "山西 · 寿阳县· 平头镇",
+        "star": 2.5
     },
     "北京/IMG_3208.jpeg": {
         "CameraModel": "iPhone 11",
@@ -189,7 +204,8 @@
         "Latitude": 39.92021944444444,
         "Longitude": 116.39043333333333,
         "DateTime": "2022:08:06 16:10:11",
-        "Location": "北京 · 西城区· 西长安街街道"
+        "Location": "北京 · 西城区· 西长安街街道",
+        "star": 3.5
     },
     "北京/IMG_3003.jpeg": {
         "CameraModel": "iPhone 11",
@@ -201,7 +217,8 @@
         "Latitude": 39.921475,
         "Longitude": 116.3853138888889,
         "DateTime": "2022:07:31 17:09:48",
-        "Location": "北京 · 西城区· 西长安街街道"
+        "Location": "北京 · 西城区· 西长安街街道",
+        "star": 3.5
     },
     "北京/IMG_3718.jpeg": {
         "CameraModel": "iPhone 11",
@@ -213,7 +230,8 @@
         "Latitude": 39.90600277777778,
         "Longitude": 116.39504166666667,
         "DateTime": "2022:10:03 17:59:57",
-        "Location": "北京 · 西城区· 西长安街街道"
+        "Location": "北京 · 西城区· 西长安街街道",
+        "star": 2.5
     },
     "北京/IMG_3734.jpeg": {
         "CameraModel": "iPhone 11",
@@ -225,7 +243,8 @@
         "Latitude": 39.905991666666665,
         "Longitude": 116.39501111111112,
         "DateTime": "2022:10:03 18:03:34",
-        "Location": "北京 · 西城区· 西长安街街道"
+        "Location": "北京 · 西城区· 西长安街街道",
+        "star": 4.5
     },
     "北京/IMG_2945.jpeg": {
         "CameraModel": "iPhone 11",
@@ -237,7 +256,8 @@
         "Latitude": 40.00449444444445,
         "Longitude": 116.3048861111111,
         "DateTime": "2022:07:30 14:41:52",
-        "Location": "北京 · 海淀区· 青龙桥街道"
+        "Location": "北京 · 海淀区· 青龙桥街道",
+        "star": 3.5
     },
     "天津/beauty_1697337709482.JPEG": {
         "CameraModel": "Unknown",
@@ -261,6 +281,7 @@
         "Latitude": 39.15154722222222,
         "Longitude": 117.18090833333333,
         "DateTime": "2023:10:14 22:04:32",
-        "Location": "天津 · 红桥区· 三条石街道"
+        "Location": "天津 · 红桥区· 三条石街道",
+        "star": 3.5
     }
 }

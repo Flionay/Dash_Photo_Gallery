@@ -14,13 +14,13 @@ from .photos import (
     album_card_style,
     create_image_card,
 )
-
+from views.login import login_layout
+from views.star import rating_layout
 
 def create_image_metadata(image_data, album_name):
     gutter_item = "0px 40px"
         
     location = image_data.get('位置', '未知')
-    print(location)
     if location == "未知":
         location = album_name
     return html.Div(
@@ -166,13 +166,16 @@ def create_image_metadata(image_data, album_name):
 
 
 
-# 展示精选图片，按时间显示
+# 展示所有图片，按时间显示
 def display_photos(albums_data):
     all_photos = []
 
-    # 遍历 albums_data，提取所有照片
+    # 提取所有图片
+    all_photos = []
     for album in albums_data.values():
         all_photos.extend(album["images"])
+        
+    all_photos = sorted(all_photos, key=lambda x: float(get_exif_data(x).get("star",0)), reverse=True)
 
     # 将照片分配到列中
     num_images = len(all_photos)
@@ -206,8 +209,8 @@ def display_photos(albums_data):
     )
 
 
-# 展示图片
-def display_photos_random(albums_data):
+# 轮播图展示高星标图片,
+def display_photos_star(albums_data):
 
     def get_album_name(image_url):
         for album_name, album in albums_data.items():
@@ -218,6 +221,8 @@ def display_photos_random(albums_data):
     all_photos = []
     for album in albums_data.values():
         all_photos.extend(album["images"])
+        
+    all_photos = sorted(all_photos, key=lambda x: float(get_exif_data(x).get("star",0)), reverse=True)
 
     
     return fac.AntdCarousel(
@@ -307,7 +312,6 @@ def display_photos_in_album(albums_data, pathname):
     num_images = len(album["images"])
     images_per_column = num_images // 3  # 每列的基本片数量
     remainder = num_images % 3  # 余数
-    print(remainder)
     # 初始化列
     columns = [[] for _ in range(3)]
 
@@ -409,16 +413,22 @@ def display_map_page(albums_data):
         Input("url", "pathname"),
         Input("albums-data", "data"),
         Input("theme-status", "data"),
+        Input('is-logged-in', 'data')
     ],
 )
 def display_page(
     pathname,
     albums_data,
     is_dark_mode,
+    is_logged_in
 ):
-
-    if pathname == "/": #按照评分 显示精选图片
-        return display_photos_random(albums_data)
+    
+    if pathname == '/rating' and is_logged_in:
+        return rating_layout(albums_data)
+    elif pathname == '/rating': #按照评分 显示精选图片
+        return login_layout
+    elif pathname == "/": #按照评分 显示精选图片
+        return display_photos_star(albums_data)
 
     elif pathname == "/albums":
         return display_photos_albums(albums_data, is_dark_mode)

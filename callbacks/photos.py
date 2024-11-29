@@ -19,19 +19,19 @@ def create_image_card(image_url, index):
                     style={"width": "100%", "height": "100%", "marginBottom": "0px"},
                 ),
                 
-                fac.AntdRate(
-                    id={'type': 'rating', 'index': index},
-                    allowHalf=True,
-                    defaultValue=2.5,
-                    style={
-                        "position": "absolute",
-                        "bottom": "10px",
-                        "right": "10px",
-                        "backgroundColor": "rgba(255, 255, 255, 0.3)",
-                        "display": "none",  # 默认隐藏
-                    },
-                # onChange=lambda value: update_rating(value, index)  # 更新评分
-                ),
+                # fac.AntdRate(
+                #     id={'type': 'rating', 'index': index},
+                #     allowHalf=True,
+                #     defaultValue=2.5,
+                #     style={
+                #         "position": "absolute",
+                #         "bottom": "10px",
+                #         "right": "10px",
+                #         "backgroundColor": "rgba(255, 255, 255, 0.3)",
+                #         "display": "none",  # 默认隐藏
+                #     },
+                # # onChange=lambda value: update_rating(value, index)  # 更新评分
+                # ),
             ],
 
             className={
@@ -87,20 +87,14 @@ def show_image_modal(n_clicks_list, albums_data, pathname):
     if not any(n_clicks_list):
         return dash.no_update, False
     ctx = callback_context
-    # if not ctx.triggered:
-    #     return dash.no_update, False
-
     # 解析 prop_id
     prop_id = ctx.triggered[0]["prop_id"]
     # 获取被点击的图片索引
-    # print(prop_id[:-9])
     clicked_image_name = eval(prop_id[:-9])["index"]  # 获取 index 的值
-    print(clicked_image_name,'被点击了')
     album_name = unquote(pathname.strip("/"))
     for album in albums_data.values():
         for image_u in album["images"]:
             if clicked_image_name in image_u:
-                print(image_u)
                 image_url = image_u
                 break  # 找到后可以退出循环
         else:
@@ -108,7 +102,6 @@ def show_image_modal(n_clicks_list, albums_data, pathname):
         break  # 找到后退出外层循环
     # image_url = [image_u for image_u in album["images"] if clicked_image_name in image_u][0] # 获取被点击的图片地址
     image_data = get_exif_data(image_url)
-    print(image_data)
     return (
         html.Div(
             [
@@ -134,7 +127,6 @@ def show_image_modal(n_clicks_list, albums_data, pathname):
 
 def create_image_metadata(image_data, album_name):
     location = image_data.get('位置', '未知')
-    print(location)
     if location == "未知":
         location = album_name
     return html.Div(

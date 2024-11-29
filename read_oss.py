@@ -8,9 +8,33 @@ def get_exif_json(bucket):
     oss_exif_data_key = 'gallery/exif_data.json'
     exif_data = bucket.get_object(oss_exif_data_key).read()  # 读取为 bytes
     exif_data_dict = json.loads(exif_data.decode('utf-8'))  # 解码为字符串并转换为字典
-    with open('exif_data.json', 'w', encoding='utf-8') as json_file:
-        json.dump(exif_data_dict, json_file, ensure_ascii=False, indent=4)
-    print("exif_data.json 文件已保存到本地。")
+
+    # 检查本地是否存在 exif_data.json 文件
+    local_exif_file = 'exif_data.json'
+    local_exif_data_dict = {}
+
+    if os.path.exists(local_exif_file):
+        with open(local_exif_file, 'r', encoding='utf-8') as json_file:
+            local_exif_data_dict = json.load(json_file)  # 读取本地数据
+
+    # 更新本地数据
+    for key in list(local_exif_data_dict.keys()):
+        if key not in exif_data_dict:
+            # 如果远程没有该键，而本地有，则删除本地的键
+            del local_exif_data_dict[key]
+            print(f"删除本地的键: {key}")
+
+    for key in exif_data_dict:
+        if key not in local_exif_data_dict:
+            # 如果本地没有该键，则将远程的键添加到本地
+            local_exif_data_dict[key] = exif_data_dict[key]
+            print(f"添加远程的键: {key}")
+
+    # 将更新后的数据写回到本地的 exif_data.json 文件
+    with open(local_exif_file, 'w', encoding='utf-8') as json_file:
+        json.dump(local_exif_data_dict, json_file, ensure_ascii=False, indent=4)
+
+    print("exif_data.json 文件已更新并保存到本地。")
 
 
 def update_albums_json_data(bucket,folder='gallery'):

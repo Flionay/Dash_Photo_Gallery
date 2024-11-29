@@ -16,6 +16,7 @@ import dash
 from callbacks.index import *
 from callbacks.photos import *
 from callbacks.theme import *
+from callbacks.star import *
 from views.navbar import render_navbar
 
 with open("albums.json", "r", encoding="utf-8") as f:
@@ -27,6 +28,11 @@ app.layout = html.Div(
         dcc.Location(id="url", refresh=False),
         dcc.Store(id="theme-status", storage_type='local'),
         dcc.Store(id="albums-data",data=albums_data),
+        dcc.Store(id="is-logged-in",data=False,storage_type='local'),
+        html.Div(
+            id="rating-output",
+        ),
+        
         html.Div(
             id="main-container",
             children=[

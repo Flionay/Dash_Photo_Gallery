@@ -46,6 +46,7 @@ def get_exif_data(image_url):
             "镜头": parsed_exif.get("LensModel", "未知"),  # 镜头型号
             "Longitude": parsed_exif.get("Longitude", None),
             "Latitude": parsed_exif.get("Latitude", None),
+            "star": parsed_exif.get("star", None),
         }
         # print(image_info)
         return image_info
