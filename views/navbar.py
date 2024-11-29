@@ -4,13 +4,14 @@ from dash import html, dcc
 import config
 from dash_iconify import DashIconify
 
+
 logo = fac.AntdImage(
     id="logo",
     src=config.LOGO_PATH,
     preview=False,
     style={
         "height": "60px",
-        "width": "150px",
+        "width": "165px",
         "borderRadius": "20%",
         "overflow": "hidden",
         "marginRight": "10px",
@@ -76,7 +77,7 @@ def render_navbar():
                     ),
                     theme_switch,
                     html.A(
-                        DashIconify(icon="logos:github-icon", style={"fontSize": "24px", "color": "#333"}),
+                        DashIconify(id="github-icon", icon="logos:github-icon", style={"fontSize": "24px", "color": "gray"}),
                         href="https://github.com/Flionay/Dash_Photo_Gallery",  # 替换为你的 GitHub 地址
                         target="_blank",  # 在新标签页中打开
                         style={"textDecoration": "none", "marginLeft": "17px","display": "flex", "color": "gray"},
@@ -97,4 +98,5 @@ def render_navbar():
         offsetTop=0.1,
     )
     return navbar
+
 

@@ -4,6 +4,9 @@ import feffery_antd_components as fac
 from dash.dependencies import Input, Output, State
 from server import app 
 import config
+import feffery_utils_components as fuc
+
+
 # 添加一个新的回调来获取当前主题状态
 @app.callback(Output("theme-status", "data"), Input("theme-switch", "checked"))
 def update_theme_status(is_dark_mode):
@@ -31,19 +34,20 @@ def toggle_theme(is_dark_mode):
             "color": "white",
         }
         logo_src = config.LOGO_PATH_LIGHT
+        
     else:
         common_style = {
             "backgroundColor": "#f0f2f5",
             "color": "black",
             "minHeight": "100vh",
-            "backgroundImage": "linear-gradient(135deg, #f0f2f5 0%, #ffffff 100%)",
+            "backgroundImage": "linear-gradient(135deg, #f0f2f5 0%, #ffffff 85%)",
         }
         navbar_style = {
             "backgroundColor": "#f0f2f5",
             "color": "black",
         }
         logo_src = config.LOGO_PATH
-
+ 
     return common_style, {
         **navbar_style,
         "padding": "20px 40px",
@@ -51,3 +55,4 @@ def toggle_theme(is_dark_mode):
         "alignItems": "center",
         "justifyContent": "space-between",
     }, logo_src
+

@@ -22,6 +22,12 @@ from views.navbar import render_navbar
 with open("albums.json", "r", encoding="utf-8") as f:
     albums_data = json.load(f)
 
+
+from dotenv import load_dotenv
+
+# 加载 .env 文件中的环境变量
+load_dotenv()
+
 # 初始主题
 app.layout = html.Div(
     [
@@ -29,8 +35,12 @@ app.layout = html.Div(
         dcc.Store(id="theme-status", storage_type='local'),
         dcc.Store(id="albums-data",data=albums_data),
         dcc.Store(id="is-logged-in",data=False,storage_type='local'),
+        dcc.Store(id="image_modal"),
         html.Div(
             id="rating-output",
+        ),
+        html.Div(
+            id="like-output",
         ),
         
         html.Div(
@@ -45,7 +55,8 @@ app.layout = html.Div(
                 fac.AntdModal(
                     id="modal-content",
                     style={
-                        "maxWidth": "90%",
+                        "maxWidth": "95%",
+                        # "width": "90vw",
                         "margin": "auto",
                         "padding": "0px",
                         "backgroundColor": "rgba(0, 0, 0, 0.0)",
@@ -55,7 +66,7 @@ app.layout = html.Div(
                         "backdropFilter": "blur(10px)",  # 设置毛玻璃效果
                         # "backgroundColor": "rgba(255, 255, 255, 0.5)",  # 半透明背景
                     },
-                    width="60vw",
+                    width="85vw",
                     centered=True,
                 ),
                 # dcc.Interval(
@@ -91,4 +102,4 @@ def update_app_albums_data(pathname):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=False)

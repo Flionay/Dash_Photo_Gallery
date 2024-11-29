@@ -7,9 +7,11 @@ import datetime
 from fractions import Fraction  
 import json
 import os
+import numpy as np
+
 root_path = os.path.dirname(os.path.abspath(__file__))
 
-def get_exif_data(image_url):
+def  get_exif_data(image_url):
     # print("输入的url",image_url)
     # 本地 JSON 文件的路径
     json_file_path = os.path.join(root_path, 'exif_data.json')  # 替换为实际的本地 JSON 文件路径
@@ -22,9 +24,11 @@ def get_exif_data(image_url):
         
         # 假设 JSON 数据的结构是一个字典，键是图片 URL，值是对应的 EXIF 数据
         parsed_exif = {}
+        image_idx = None
         for key,value in exif_data.items():
             if key.startswith(position):
                 parsed_exif = value
+                image_idx = key
 
             
         # print("匹配的图片",position,"匹配到的EXIF数据",parsed_exif)
@@ -47,6 +51,8 @@ def get_exif_data(image_url):
             "Longitude": parsed_exif.get("Longitude", None),
             "Latitude": parsed_exif.get("Latitude", None),
             "star": parsed_exif.get("star", None),
+            "likes": parsed_exif.get("likes", np.random.randint(90, 401)),
+            'image_idx': image_idx
         }
         # print(image_info)
         return image_info

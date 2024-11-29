@@ -10,7 +10,8 @@
         "Longitude": null,
         "DateTime": "2024:04:04 18:03:45",
         "Location": "未知",
-        "star": 4
+        "star": 4,
+        "likes": 192
     },
     "上海/DSC04061.JPG": {
         "CameraModel": "ZV-E10",
@@ -36,7 +37,8 @@
         "Longitude": null,
         "DateTime": "2024:04:04 18:04:23",
         "Location": "未知",
-        "star": 3.5
+        "star": 3.5,
+        "likes": 172
     },
     "上海/DSC04056.JPG": {
         "CameraModel": "ZV-E10",
@@ -49,7 +51,8 @@
         "Longitude": null,
         "DateTime": "2024:04:04 17:59:54",
         "Location": "未知",
-        "star": 4
+        "star": 4,
+        "likes": 180
     },
     "青岛/IMG_1594.jpeg": {
         "CameraModel": "iPhone 11",
@@ -88,7 +91,8 @@
         "Longitude": 120.47925555555555,
         "DateTime": "2021:05:28 11:58:49",
         "Location": "山东 · 崂山区· 金家岭街道",
-        "star": 2.5
+        "star": 2.5,
+        "likes": 229
     },
     "青岛/IMG_1439.jpeg": {
         "CameraModel": "iPhone 11",
@@ -153,7 +157,8 @@
         "Longitude": 120.3359611111111,
         "DateTime": "2021:08:05 12:17:47",
         "Location": "山东 · 市南区· 八大关街道",
-        "star": 2.5
+        "star": 2.5,
+        "likes": 152
     },
     "青岛/IMG_1552.jpeg": {
         "CameraModel": "iPhone 11",
@@ -179,7 +184,8 @@
         "Longitude": 112.86393055555556,
         "DateTime": "2021:03:01 08:45:46",
         "Location": "山西 · 寿阳县· 平头镇",
-        "star": 3
+        "star": 3,
+        "likes": 194
     },
     "山西/IMG_0762.jpeg": {
         "CameraModel": "iPhone 11",
@@ -205,7 +211,8 @@
         "Longitude": 116.39043333333333,
         "DateTime": "2022:08:06 16:10:11",
         "Location": "北京 · 西城区· 西长安街街道",
-        "star": 3.5
+        "star": 3.5,
+        "likes": 291
     },
     "北京/IMG_3003.jpeg": {
         "CameraModel": "iPhone 11",
@@ -218,7 +225,8 @@
         "Longitude": 116.3853138888889,
         "DateTime": "2022:07:31 17:09:48",
         "Location": "北京 · 西城区· 西长安街街道",
-        "star": 3.5
+        "star": 3.5,
+        "likes": 137
     },
     "北京/IMG_3718.jpeg": {
         "CameraModel": "iPhone 11",
@@ -282,6 +290,7 @@
         "Longitude": 117.18090833333333,
         "DateTime": "2023:10:14 22:04:32",
         "Location": "天津 · 红桥区· 三条石街道",
-        "star": 3.5
+        "star": 3.5,
+        "likes": 233
     }
 }

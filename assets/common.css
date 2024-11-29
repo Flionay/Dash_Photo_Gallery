@@ -17,30 +17,25 @@
 .ant-menu-title-content{
     /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);  添加阴影效果 */
     background-color: transparent;  /* 去掉背景色 */
-    font-size: 19px;  /* 增加字体大小 */
+    font-size: 16px;  /* 增加字体大小 */
     color: gray;  /* 被选中项使用黑色字体 */
 }
 
 
-/* 自定义 AntdMenu 被选中项的样式 */
-.ant-menu-title-content {
-    /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);  添加阴影效果 */
-    /* background-color: transparent;  去掉背景色 */
-    font-size: 15px; 
-    color: gray; 
-}
 
-/* 自定义未选中项的样式 */
 .ant-menu-item-selected a{
     color: black !important;  
-    font-size: 18px;  /* 增加字体大小 */
+    font-size: 18px;  
+    font-weight: bold;
 }
 
 .ant-menu-item-active a{
     color: black !important;  
-    font-size: 18px;  /* 增加字体大小 */
+    font-size: 18px; 
     border-bottom-width: 0px !important;
 }
+
+
 .ant-menu-overflow-item::after{
     border-bottom-width: 0px !important;
 }
@@ -90,7 +85,7 @@
 
 
 .ant-modal .ant-modal-content {
-    background-color: rgba(248, 240, 240, 1) !important;
+    background-color: #f7f3f2 !important;
     max-width: 100%;
     padding: 0px;
 }

@@ -7,7 +7,8 @@ from server import app
 from util import get_exif_data
 from dash_iconify import DashIconify
 from urllib.parse import unquote
-
+import json
+import os
 
 # 在布局中使用 html.Div 包围图片
 def create_image_card(image_url, index):
@@ -75,8 +76,44 @@ def album_card_style(is_dark_mode):
     return card_style
 
         
+def create_modal_head_button(image_data):
+    # 返回一行，左边包含星级显示，右边包含点赞和下载按钮
+    like = image_data.get('like')
+    star = image_data.get('star')
+    return fac.AntdFlex(
+        [
+            html.Div(
+                [
+                    fac.AntdRate(
+                        count=5, value=star, allowHalf=True, disabled=True,
+                    )
+                ],
+                # style={"flex": "1"}  # 左边星级占据剩余空间
+            ),
+            html.Div(
+                [
+                    # fuc.FefferyFancyButton(
+                    #     f'{like}', id='like_button',before=fac.AntdIcon(icon='md-thumb-up'), 
+                    #     type="secondary",
+                    #     ripple=True
+                    # ),
+                    fac.AntdButton(
+                        f'{like}', id='like_button',icon=fac.AntdIcon(icon='md-thumb-up'), 
+                        motionType='happy-work', color='danger', variant='outlined',
+                        style={"fontSize": "16px"}
+                    ),
+                    # html.Button("下载", id=f"download-button-{image_url}", n_clicks=0)
+                ],
+                style={"display": "flex", "gap": "10px", "alignItems": "center"}
+            )
+        ],
+        justify='space-between',
+        style={"margin": "auto 120px", "paddingTop": "50px"}
+    )
+
+
 @app.callback(
-    [Output("modal-content", "children"), Output("modal-content", "visible")],
+    [Output("modal-content", "children"), Output("modal-content", "visible"),Output("image_modal", "data")],
     [Input({"type": "image-card", "index": dash.dependencies.ALL}, "n_clicks")],
     [
         State("albums-data", "data"),
@@ -85,7 +122,7 @@ def album_card_style(is_dark_mode):
 )
 def show_image_modal(n_clicks_list, albums_data, pathname):
     if not any(n_clicks_list):
-        return dash.no_update, False
+        return dash.no_update, False, None
     ctx = callback_context
     # 解析 prop_id
     prop_id = ctx.triggered[0]["prop_id"]
@@ -104,7 +141,8 @@ def show_image_modal(n_clicks_list, albums_data, pathname):
     image_data = get_exif_data(image_url)
     return (
         html.Div(
-            [
+            [   
+                create_modal_head_button(image_data),
                 fac.AntdImage(
                     src=image_url,
                     style={
@@ -118,9 +156,10 @@ def show_image_modal(n_clicks_list, albums_data, pathname):
                     preview=False,
                 ),
                 create_image_metadata(image_data, album_name)
-            ], style={"display": "flex", "flexDirection": "column", "alignItems": "center"},
+            ], 
         ),
-        True
+        True,
+        image_data
     )
 
     return dash.no_update, False
@@ -247,3 +286,35 @@ def create_image_metadata(image_data, album_name):
             "borderRadius": "8px"
         },
     )
+    
+
+#将点赞写入 exif_data Json
+@app.callback(
+    Output('like-output', 'children'),  # 假设有一个输出区域显示点赞结果
+    Output('like_button', 'children'),  # 假设有一个输出区域显示点赞结果
+    Input('like_button', 'nClicks'),
+    State('image_modal', 'data'),
+    prevent_initial_call=True
+)
+
+def update_likes(n_clicks, image_info):
+    image_idx = image_info['image_idx']
+    init_like = image_info['likes']
+    if n_clicks is None:
+        return dash.no_update, init_like
+
+    # 读取现有的 exif_data.json 文件
+    with open('exif_data.json', 'r', encoding='utf-8') as f:
+        exif_data = json.load(f)
+
+    
+    if 'likes' not in exif_data[image_idx].keys():
+        exif_data[image_idx]['likes'] = init_like  # 初始化点赞计数
+    exif_data[image_idx]['likes'] += 1  # 增加点赞计数
+
+    # 将更新后的数据写回到 exif_data.json 文件
+    with open('exif_data.json', 'w', encoding='utf-8') as f:
+        json.dump(exif_data, f, ensure_ascii=False, indent=4)
+
+
+    return fac.AntdMessage(content='感谢你的喜欢🩷 +1', type='success', maxCount=2), exif_data[image_idx]['likes']

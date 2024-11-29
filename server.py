@@ -10,7 +10,7 @@ app = dash.Dash(
 )
 
 # 设置网页title
-app.title = 'Photo Gallery'
+app.title = 'AngYi\'s Gallery'
 
 server = app.server
 

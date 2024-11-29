@@ -232,7 +232,7 @@ def display_photos_star(albums_data):
                     src=photo,
                     style={
                     "width": "100%",
-                    "maxHeight": "75vh",  # 设置最大高度为视口高度的80%
+                    "maxHeight": "70vh",  # 设置最大高度为视口高度的80%
                     "objectFit": "contain",  # 保持比例，适应容器
                     "display": "block",  # 使图片为块级元素
                     "padding": "0px",  # 自动水平居中
@@ -249,6 +249,8 @@ def display_photos_star(albums_data):
         ],
         effect='fade',
         dotPosition="top",
+        speed=1000,
+        autoplay=True,
     )
 
 
@@ -371,28 +373,31 @@ def display_map_page(albums_data):
                         center={'lat': lat, 'lng': lng},
                         radius=8,  # 设置标记半径
                         pathOptions={
-                            'color': 'black',
+                            'color': 'pink',
                             'weight': 2,
                             'dashArray': '5, 2, 5',
-                            'fillOpacity': 0.4,
-                            'fillColor': 'brown'
+                            'fillOpacity': 0.5,
+                            'fillColor': 'red'
                         },
                     )
                 )
 
     map_component = flc.LeafletMap(
         [
-            flc.LeafletTileLayer(),
+            # flc.LeafletTileLayer(url="https://webst02.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}"),
+            flc.LeafletTileLayer(url="https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png"),
+            
             *markers  # 将所有标记添加到地图组件
         ],
         center={'lat': 34.3416, 'lng': 108.9402},  # 西安的经纬度
         zoom=5,  # 设置初始缩放等级为 4
-        dragging=False,
+        maxZoom=11,
+        dragging=True,
         doubleClickZoom=False,
         #doubleClickZoom=False,
         # dragging=False,
         zoomControl=False,
-        scrollWheelZoom=False,
+        scrollWheelZoom=True,
         style={
             'height': '100%',  # 设置高度为100%
             'width': '100%'    # 设置宽度为100%
@@ -403,7 +408,7 @@ def display_map_page(albums_data):
     return html.Div([
         # sidebar,
         map_component
-    ], style={"position": "relative", "height": "90vh", "width": "100%"})  # 确保父容器宽度为100%
+    ], style={"height": "80vh", "width": "100%"})  # 确保父容器宽度为100%
 
 
 # 根据url显示不同页面
@@ -423,9 +428,9 @@ def display_page(
     is_logged_in
 ):
     
-    if pathname == '/rating' and is_logged_in:
+    if pathname == '/star' and is_logged_in:
         return rating_layout(albums_data)
-    elif pathname == '/rating': #按照评分 显示精选图片
+    elif pathname == '/star': #按照评分 显示精选图片
         return login_layout
     elif pathname == "/": #按照评分 显示精选图片
         return display_photos_star(albums_data)
