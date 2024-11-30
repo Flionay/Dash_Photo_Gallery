@@ -4,7 +4,7 @@
 Dash Photo Gallery 是一个基于 Dash 框架的摄影作品展示平台，旨在为摄影爱好者提供一个高效、自动化的相册管理和展示解决方案。用户可以轻松上传、管理和展示他们的摄影作品，同时享受流畅的用户体验。
 
 <div style="text-align: center; width: 70%; margin: auto;">
-    <img src="https://angyi.oss-cn-beijing.aliyuncs.com/uPic/2024/%E6%9C%AA%E5%91%BD%E5%90%8D.png" style="width: 100%;">
+    <img src="https://angyi.oss-cn-beijing.aliyuncs.com/uPic/2024/gallery.png" style="width: 100%;">
 </div>
 
 
