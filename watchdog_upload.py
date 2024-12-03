@@ -1,94 +1,42 @@
 import time
 import os
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
 from PIL import Image, ExifTags
-import oss2
 import shutil
 from dotenv import load_dotenv
 import exifread
 import json
-import uuid
+from fractions import Fraction
+from loguru import logger 
 # 加载 .env 文件中的环境变量
 load_dotenv()
 
-# 读取密钥
-oss_access_key = os.getenv('OSS_ACCESS_KEY')
-oss_secret_key = os.getenv('OSS_SECRET_KEY')
-oss_endpoint = os.getenv('OSS_ENDPOINT')
-oss_bucket = os.getenv('OSS_BUCKET')
-# 阿里云OSS配置
-auth = oss2.Auth(oss_access_key,oss_secret_key)
-bucket = oss2.Bucket(auth, oss_endpoint, oss_bucket)
+class ImageProcessor:
+    def __init__(self, directory_path):
+        self.directory_path = directory_path
+        self.output_dir = "./output/"
+        # 清空 output 文件夹
+        if os.path.exists(self.output_dir):
+            shutil.rmtree(self.output_dir)  # 删除文件夹及其内容
+            
+        if not os.path.exists(self.output_dir):
+            os.makedirs(self.output_dir)
 
-class Watcher:
-    DIRECTORY_TO_WATCH = os.getenv('watch_dir')
-
-    def __init__(self):
-        self.observer = Observer()
-
-    def run(self):
-        event_handler = Handler()
-        self.observer.schedule(event_handler, self.DIRECTORY_TO_WATCH, recursive=True)
-        self.observer.start()
-        try:
-            while True:
-                time.sleep(900)  # 每15分钟检查一次
-        except KeyboardInterrupt:
-            self.observer.stop()
-        self.observer.join()
-
-class Handler(FileSystemEventHandler):
-    def on_any_event(self, event):
-        if event.is_directory:
-            return None
-        elif event.event_type in ('created', 'modified'):
-            self.process(Watcher.DIRECTORY_TO_WATCH)
-
-    def process(self, directory_path):
-        # 处理图片 并保存EXIF信息
-        output_dir = "./output"
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-        save_exif_to_json(directory_path, os.path.join(output_dir,'exif_data.json'))
-        for root, _, files in os.walk(directory_path):
+    def process_images(self):
+        logger.info("开始parse exif信息")
+        self.save_exif_to_json()
+        logger.info("保存EXIF信息到JSON文件")
+        for root, _, files in os.walk(self.directory_path):
             for file in files:
                 if file.endswith(('.png', '.jpg', '.jpeg', '.JPG')):
+                    logger.info(f"开始处理图片: {file}")
                     file_path = os.path.join(root, file)
-                    output_file = os.path.join(output_dir, os.path.relpath(file_path, directory_path)).rsplit('.', 1)[0] + '.webp'
+                    output_file = os.path.join(self.output_dir, os.path.relpath(file_path, self.directory_path)).rsplit('.', 1)[0] + '.webp'
                     output_file_dir = os.path.dirname(output_file)
-                    
+
                     if not os.path.exists(output_file_dir):
                         os.makedirs(output_file_dir)
 
-                    # 检查是否已经存在同名的webp文件
-                    if not os.path.exists(output_file):
-                        self.process_image(file_path, output_file)
-                        # 上传到阿里云OSS
-                        remote_path = 'gallery/' + os.path.basename(os.path.dirname(output_file)) + '/' + os.path.basename(output_file)
-                        self.upload_to_oss(remote_path, output_file)
-                elif file.endswith('.yaml'):
-                    pass
-                    self.copy_yaml_file(root, file, output_dir)
-        self.upload_to_oss('gallery/exif_data.json',"output/exif_data.json")
-        time.sleep(10)
-        send_webhook()
-
-    def copy_yaml_file(self, root, file, output_dir):
-        file_path = os.path.join(root, file)
-        output_file = os.path.join(output_dir, os.path.relpath(file_path, Watcher.DIRECTORY_TO_WATCH))
-        output_file_dir = os.path.dirname(output_file)
-
-        if not os.path.exists(output_file_dir):
-            os.makedirs(output_file_dir)
-
-        shutil.copy2(file_path, output_file)
-        
-        # 上传到阿里云OSS
-        remote_path = 'gallery/' + os.path.basename(os.path.dirname(output_file)) + '/' + os.path.basename(output_file)
-        self.upload_to_oss(remote_path, output_file)
-
-
+                    self.process_image(file_path, output_file)
 
     def process_image(self, file_path, output_file):
         with Image.open(file_path) as img:
@@ -107,59 +55,31 @@ class Handler(FileSystemEventHandler):
                     elif orientation == 8:
                         img = img.rotate(90, expand=True)
             except (AttributeError, KeyError, IndexError):
-                # 如果没有EXIF信息，直接跳过
                 pass
 
             img.save(output_file, 'webp', quality=20, exif=img.info.get('exif'))
-        add_watermark(output_file, output_file)
-        
-    def upload_to_oss(self, remote_path, file_path):
-        # print(remote_path,file_path)
-        bucket.enable_crc = False
-        with open(file_path, 'rb') as fileobj:
-            bucket.put_object(remote_path, fileobj)
+            add_watermark(output_file, output_file)
 
-from fractions import Fraction
+    def save_exif_to_json(self):
+        exif_data_dict = {}
+        for root, _, files in os.walk(self.directory_path):
+            for file in files:
+                if file.lower().endswith(('.png', '.jpg', '.jpeg', '.JPG')):
+                    file_path = os.path.join(root, file)
+                    try:
+                        with open(file_path, 'rb') as img:
+                            tags = exifread.process_file(img)
+                            readable_exif = convert_exif_to_dict(tags)
+                            relative_path = os.path.relpath(file_path, self.directory_path)
+                            exif_data_dict[relative_path] = readable_exif
+                            logger.info(f"处理 {file_path} EXIF信息成功")
+                    except Exception as e:
+                        print(f"无法处理文件 {file_path}: {e}")
 
-
-def convert_exif_value(value):
-    """将EXIF值转换为可序列化的格式"""
-    if isinstance(value, bytes):
-        return value.decode('utf-8', errors='ignore')  # 转换为字符串
-    elif isinstance(value, (int, float)):
-        return value  # 直接返回数值
-    elif isinstance(value, Fraction):
-        return float(value)  # 将IFDRational转换为浮点数
-    return str(value)  # 其他类型转换为字符串
-
-
-def save_exif_to_json(directory_path, json_file_path):
-    exif_data_dict = {}
-
-    for root, _, files in os.walk(directory_path):
-        for file in files:
-            if file.lower().endswith(('.png', '.jpg', '.jpeg', '.JPG')):
-                file_path = os.path.join(root, file)
-                try:
-                    with open(file_path,'rb') as img:
-                        # exif_data = img._getexif()
-                        tags = exifread.process_file(img)
-                        readable_exif = convert_exif_to_dict(tags)
-                        # print(readable_exif)
-                        # 按照相册/图片的级别保存EXIF信息
-                        relative_path = os.path.relpath(file_path, directory_path)
-                        exif_data_dict[relative_path] = readable_exif
-                except Exception as e:
-                    print(f"无法处理文件 {file_path}: {e}")
-                    
-    
-    try:
+        json_file_path = os.path.join(self.output_dir, 'exif_data.json')
         with open(json_file_path, 'w', encoding='utf-8') as json_file:
-            print(exif_data_dict)
             json.dump(exif_data_dict, json_file, ensure_ascii=False, indent=4)
             print("JSON 文件已保存。")
-    except Exception as e:
-        print(f"写入 JSON 文件时出错: {e}")
 
 
 
@@ -228,8 +148,7 @@ def convert_exif_to_dict(exif_data):
       
     exif_dict["Location"] = address
     return exif_dict
-        
-        
+           
 
 def parse_location_gaode(exif_data):
     
@@ -308,9 +227,32 @@ def add_watermark(input_image_path, output_image_path, watermark_path='sy.png', 
             base_image.save(output_image_path, exif=exif_data)
             
             
+
+import subprocess
+
+def upload_to_oss(src_folder, bucket_name, endpoint, access_key_id, access_key_secret):
+    endpoint = 'oss-cn-beijing.aliyuncs.com'
+    command = [
+        'ossutil', 'sync','-f', '--delete','-u', src_folder,
+        f'oss://{bucket_name}/gallery/',
+        '-e', endpoint,
+        '-i', access_key_id,
+        '-k', access_key_secret,
+        '--region', "cn-beijing"
+        
+    ]
+    print(command)
+    
+    try:
+        result = subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print("上传成功:", result.stdout.decode())
+    except subprocess.CalledProcessError as e:
+        print("上传失败:", e.stderr.decode())      
+              
+            
 def send_webhook():
     import requests
-    webhook_url = "http://localhost:8050/webhook"  # 替换为您的 Dash 应用地址
+    webhook_url = os.getenv('WEBHOOK_URL')  # 替换为您的 Dash 应用地址
     try:
         response = requests.post(webhook_url)
         if response.status_code == 200:
@@ -322,9 +264,29 @@ def send_webhook():
 
 
 if __name__ == '__main__':
-    # add_watermark('output/上海/DSC03640.webp', 'output_image.jpg')
-    # # pass
-    w = Watcher()
-    w.run()
     
-    save_exif_to_json("/Users/angyi/Documents/图片/Gallery/青岛", './test.json')
+    
+    directory_to_process = os.getenv('watch_dir')
+    while True:
+        if 'run.txt' in os.listdir(directory_to_process):
+            print(f"开始处理目录: {directory_to_process}")
+            # loguru 日志文件
+            logger.add(os.path.join(directory_to_process, 'running_log.txt'), level='INFO')
+
+            # processor = ImageProcessor(directory_to_process)
+            # processor.process_images()
+            
+             # 删除 running_log 日志 表示图片处理完
+            os.remove(os.path.join(directory_to_process, 'running_log.txt'))
+            upload_to_oss(src_folder='./output/', bucket_name=os.getenv('OSS_BUCKET'), 
+                        endpoint=os.getenv('OSS_ENDPOINT'), access_key_id=os.getenv('OSS_ACCESS_KEY'), 
+                        access_key_secret=os.getenv('OSS_SECRET_KEY'))
+            send_webhook()
+            
+            # 删除 run.txt 表示上传完
+            os.remove(os.path.join(directory_to_process, 'run.txt'))
+            
+        else:
+            time.sleep(1)
+            print('.', end='', flush=True)
+        

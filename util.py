@@ -50,7 +50,7 @@ def  get_exif_data(image_url):
             "镜头": parsed_exif.get("LensModel", "未知"),  # 镜头型号
             "Longitude": parsed_exif.get("Longitude", None),
             "Latitude": parsed_exif.get("Latitude", None),
-            "star": parsed_exif.get("star", None),
+            "star": parsed_exif.get("star", 0),
             "likes": parsed_exif.get("likes", np.random.randint(90, 401)),
             'image_idx': image_idx
         }
