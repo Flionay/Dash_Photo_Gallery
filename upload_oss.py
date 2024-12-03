@@ -37,6 +37,19 @@ class ImageProcessor:
                         os.makedirs(output_file_dir)
 
                     self.process_image(file_path, output_file)
+                    pass
+                elif file.endswith('.yaml'):
+                    self.copy_yaml_file(root, file, self.output_dir)
+                    
+    def copy_yaml_file(self, root, file, output_dir):
+        file_path = os.path.join(root, file)
+        output_file = os.path.join(output_dir, os.path.relpath(file_path, self.directory_path))
+        output_file_dir = os.path.dirname(output_file)
+
+        if not os.path.exists(output_file_dir):
+            os.makedirs(output_file_dir)
+        shutil.copy2(file_path, output_file)
+        
 
     def process_image(self, file_path, output_file):
         with Image.open(file_path) as img:
@@ -273,8 +286,8 @@ if __name__ == '__main__':
             # loguru 日志文件
             logger.add(os.path.join(directory_to_process, 'running_log.txt'), level='INFO')
 
-            # processor = ImageProcessor(directory_to_process)
-            # processor.process_images()
+            processor = ImageProcessor(directory_to_process)
+            processor.process_images()
             
              # 删除 running_log 日志 表示图片处理完
             os.remove(os.path.join(directory_to_process, 'running_log.txt'))
