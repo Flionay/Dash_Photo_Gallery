@@ -3,7 +3,7 @@ import dash
 from dash import html, dcc
 import config
 from dash_iconify import DashIconify
-
+from server import app
 
 logo = fac.AntdImage(
     id="logo",
@@ -59,11 +59,17 @@ theme_switch = fac.AntdSwitch(
     checked=False,
     checkedChildren="🌙",
     unCheckedChildren="☀️",
-    style={"marginLeft": "auto"},
+    # style={"marginLeft": "15px"}
 )
 
+# 新增客户端时间监听组件
+time_sync = dcc.Interval(
+    id='time-sync',
+    interval=60*1000,  # 每分钟同步一次
+    n_intervals=0
+)
 def render_navbar():
-    navbar = fac.AntdAffix(
+    return fac.AntdAffix(
         fac.AntdHeader(
             html.Div(
                 [
@@ -81,7 +87,8 @@ def render_navbar():
                         href="https://github.com/Flionay/Dash_Photo_Gallery",  # 替换为你的 GitHub 地址
                         target="_blank",  # 在新标签页中打开
                         style={"textDecoration": "none", "marginLeft": "17px","display": "flex", "color": "gray"},
-                    )
+                    ),
+                    time_sync,
                 ],
                 style={"display": "flex", "alignItems": "center", "width": "100%"},
             ),
@@ -98,5 +105,6 @@ def render_navbar():
         offsetTop=0.1,
     )
     return navbar
+
 
 

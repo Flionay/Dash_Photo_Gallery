@@ -56,3 +56,35 @@ def toggle_theme(is_dark_mode):
         "justifyContent": "space-between",
     }, logo_src
 
+@app.callback(
+    [
+        Output("theme-switch", "checked"),
+        Output("auto-theme-enabled", "data")  # 新增自动主题状态存储
+    ],
+    [
+        Input("client-time", "modified_timestamp"),
+        Input("theme-switch", "checked")
+    ],
+    [
+        State("client-time", "data"),
+        State("auto-theme-enabled", "data")  # 获取当前自动模式状态
+    ]
+)
+def auto_switch_theme(ts, manual_checked, client_time, auto_enabled):
+    ctx = dash.callback_context
+    if not ctx.triggered:
+        return dash.no_update, dash.no_update
+        
+    trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
+    
+    if trigger_id == "client-time":
+        if auto_enabled:  # 仅在自动模式启用时生效
+            hour = int(client_time.split(':')[0])
+            return (hour >= 18 or hour < 6), True
+        return dash.no_update, dash.no_update
+    elif trigger_id == "theme-switch":
+        # 当用户手动切换时，关闭自动模式
+        return manual_checked, False
+        
+    return dash.no_update, dash.no_update
+

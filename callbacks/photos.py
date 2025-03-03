@@ -17,38 +17,34 @@ def create_image_card(image_url, index):
                 fac.AntdImage(
                     src=image_url,
                     preview=False,
-                    style={"width": "100%", "height": "100%", "marginBottom": "0px"},
+                    style={
+                        "width": "100%", 
+                        "height": "100%",
+                        "marginBottom": "0px",
+                        "transform": "translateZ(0)",  # 触发GPU加速
+                        "backfaceVisibility": "hidden"  # 避免闪烁
+                    },
                 ),
-                
-                # fac.AntdRate(
-                #     id={'type': 'rating', 'index': index},
-                #     allowHalf=True,
-                #     defaultValue=2.5,
-                #     style={
-                #         "position": "absolute",
-                #         "bottom": "10px",
-                #         "right": "10px",
-                #         "backgroundColor": "rgba(255, 255, 255, 0.3)",
-                #         "display": "none",  # 默认隐藏
-                #     },
-                # # onChange=lambda value: update_rating(value, index)  # 更新评分
-                # ),
             ],
-
             className={
                 "&:hover": {
-                    "transform": "scale(1.02)",  # /* 鼠标悬停时放大 5% */
-                    "box-shadow": "0 4px 15px rgba(0, 0, 0, 0.5)",  # /* 添加阴影效果 */
+                    "transform": "scale(1.02)",
+                    "boxShadow": "0 4px 15px rgba(0, 0, 0, 0.5)",
                 }
             },
-            style={"position": "relative"},
+            style={
+                "position": "relative",
+                "willChange": "transform",  # 预声明动画属性
+                "transform": "translateZ(0)",  # 开启GPU加速
+            },
         ),
         id={"type": "image-card", "index": index},
         n_clicks=0,
         style={
-            "cursor": "pointer",
-            "transition": "transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)",  # 使用自定义缓动函数
+            "cursor": "pointer", # 优化浏览器渲染
+            "transition": "transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)",  # 简化过渡效果
             "marginBottom": "20px",
+            "perspective": "1000px"  # 3D透视优化
         },
     )
 
@@ -99,7 +95,7 @@ def create_modal_head_button(image_data):
                     # ),
                     fac.AntdButton(
                         f'{like}', id='like_button',icon=fac.AntdIcon(icon='md-thumb-up'), 
-                        motionType='happy-work', color='danger', variant='outlined',
+                        motionType='happy-work',
                         style={"fontSize": "16px"}
                     ),
                     # html.Button("下载", id=f"download-button-{image_url}", n_clicks=0)

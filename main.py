@@ -32,7 +32,10 @@ load_dotenv()
 app.layout = html.Div(
     [
         dcc.Location(id="url", refresh=False),
-        dcc.Store(id="theme-status", storage_type='local'),
+        dcc.Store(id="theme-status", storage_type='local'),  # 新增主题状态存储
+        dcc.Store(id="auto-theme-enabled", data=True, storage_type='local'),  # 新增自动模式状态
+        dcc.Store(id="init-load", storage_type='local'),
+        dcc.Store(id="client-time", storage_type='local'),
         dcc.Store(id="albums-data",data=albums_data),
         dcc.Store(id="is-logged-in",data=False,storage_type='local'),
         dcc.Store(id="image_modal"),
@@ -97,9 +100,35 @@ def update_app_albums_data(pathname):
     return albums_data
 
 
+app.clientside_callback(
+    """
+    function(n) {
+        const now = new Date();
+        return now.getHours() + ':' + now.getMinutes();
+    }
+    """,
+    Output("client-time", "data"),
+    Input("time-sync", "n_intervals")
+)
 
+# 添加客户端回调
+app.clientside_callback(
+    """
+    function(n_intervals, url) {
+        // 仅在首次加载时触发
+        if (!window.performance || window.performance.navigation.type === 1) {
+            return '/';
+        }
+        return dash_clientside.no_update;
+    }
+    """,
+    Output("url", "pathname"),
+    Input("init-load", "data"),
+    State("url", "pathname")
+)
 
 
 
 if __name__ == "__main__":
-    app.run_server(debug=False)
+    app.run_server(debug=True)
+

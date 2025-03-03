@@ -102,3 +102,64 @@
     color: rgba(101, 98, 98, 1) !important;
     font-size: 18px;
 }
+
+/* 强制相册标题颜色继承 */
+.ant-card-meta-title {
+    color: inherit !important;
+}
+
+/* 菜单项样式优化 */
+.ant-menu-item {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+.ant-menu-item:hover {
+    color: var(--hover-color) !important;
+    transform: scale(1.05);
+}
+
+.ant-menu-item-selected {
+    background: none !important;
+    border-bottom: 2px solid var(--hover-color) !important;
+}
+
+
+/* :root {
+    --primary-color: #2d3436;
+    --secondary-color: #636e72;
+    --accent-color: #0984e3;
+    --text-primary: rgba(0, 0, 0, 0.85);
+    --text-secondary: rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] {
+    --primary-color: #dfe6e9;
+    --secondary-color: #b2bec3;
+    --accent-color: #74b9ff;
+    --text-primary: rgba(255, 255, 255, 0.85);
+    --text-secondary: rgba(255, 255, 255, 0.6);
+} */
+
+/* 应用示例 */
+.ant-card-meta-title {
+    color: var(--text-primary) !important;
+}
+
+.text_row_gray {
+    color: var(--text-secondary) !important;
+}
+
+/* 修改卡片悬停效果 */
+.ant-card:hover {
+    box-shadow: 0 6px 20px -8px rgba(0, 0, 0, 0.3) !important;
+    transform: translateY(-2px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 暗色模式适配 */
+.dark .ant-card:hover {
+    box-shadow: 0 6px 20px -4px rgba(255, 255, 255, 0.15) !important;
+}
+
