@@ -1,5 +1,5 @@
 # 构建阶段
-FROM alpine:3.18 as builder
+FROM alpine:3.18 AS builder  
 
 # 安装系统依赖
 RUN apk add --no-cache \
@@ -34,9 +34,10 @@ ENV PYTHONUNBUFFERED=1 \
 # 从构建阶段复制依赖
 COPY --from=builder /root/.local /root/.local
 
+# 调整文件复制顺序
 WORKDIR /app
-COPY app ./app
 COPY main.py .
+COPY . .  
 
 # 暴露端口
 EXPOSE 8050
