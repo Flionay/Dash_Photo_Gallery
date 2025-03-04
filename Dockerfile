@@ -21,10 +21,12 @@ RUN python3 -m pip install --user --no-cache-dir -r requirements.txt
 # ------------ 生产镜像 ------------
 FROM alpine:3.18
 
-# 安装运行时依赖
-RUN apk add --no-cache \
-    python3=3.9.18-r0 \
-    libstdc++
+# 安装运行时依赖（修复版本号问题）
+RUN apk update && apk add --no-cache \
+    python3 \
+    libstdc++ \
+    libgcc \
+    musl
 
 # 设置环境变量
 ENV PYTHONUNBUFFERED=1 \
