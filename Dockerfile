@@ -1,7 +1,7 @@
 # 基础镜像
 FROM python:3.9-slim as builder
 
-# 安装系统依赖
+# 安装系统依赖（保持不变）
 RUN apt-get update && apt-get install -y \
     gcc \
     libgl1 \
