@@ -1,4 +1,4 @@
-dash==2.0.0
+dash==2.10.2
 dash_iconify==0.1.2
 exifread==3.0.0
 feffery_antd_components==0.3.10
@@ -13,4 +13,4 @@ PyYAML==6.0.2
 requests==2.32.3
 reverse_geocoder==1.5.1
 watchdog==5.0.3
-uvicorn==0.23.2
+gunicorn==23.0.0

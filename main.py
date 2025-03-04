@@ -24,7 +24,7 @@ with open("albums.json", "r", encoding="utf-8") as f:
 
 
 from dotenv import load_dotenv
-
+server = app.server
 # 加载 .env 文件中的环境变量
 load_dotenv()
 
