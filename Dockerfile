@@ -1,39 +1,45 @@
-# 基础镜像
-FROM python:3.9-slim as builder
+# 构建阶段
+FROM alpine:3.18 as builder
 
-# 安装系统依赖（保持不变）
-RUN apt-get update && apt-get install -y \
+# 安装系统依赖
+RUN apk add --no-cache \
+    python3=3.9.18-r0 \
+    py3-pip \
     gcc \
-    libgl1 \
-    && rm -rf /var/lib/apt/lists/*
+    musl-dev \
+    libc-dev \
+    libstdc++ \
+    libgl1
 
 # 配置清华镜像源
 RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
 # 安装Python依赖
 COPY requirements.txt .
-RUN pip install --user -r requirements.txt
+RUN python3 -m pip install --user --no-cache-dir -r requirements.txt
 
 # ------------ 生产镜像 ------------
-FROM python:3.9-slim
+FROM alpine:3.18
+
+# 安装运行时依赖
+RUN apk add --no-cache \
+    python3=3.9.18-r0 \
+    libstdc++
 
 # 设置环境变量
 ENV PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app
+    PYTHONPATH=/app \
+    PATH="/root/.local/bin:$PATH"
 
-# 从builder阶段复制已安装的包
+# 从构建阶段复制依赖
 COPY --from=builder /root/.local /root/.local
-ENV PATH=/root/.local/bin:$PATH
 
-# 复制项目文件
 WORKDIR /app
-COPY . .
+COPY app ./app
+COPY main.py .
 
-# 安装生产依赖
-RUN pip install --user uvicorn gunicorn
+# 暴露端口
+EXPOSE 8050
 
-# 暴露ASGI端口
-EXPOSE 8099
-
-# 启动命令（包含WSGI和ASGI双模式）
-CMD ["uvicorn", "main:app.server", "--host", "0.0.0.0", "--port", "8050", "--workers", "4"]
+# 启动命令
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8050", "--workers", "4"]
