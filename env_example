@@ -1,0 +1,18 @@
+# 本地监控目录配置
+WATCH_DIR=/path/to/your/photos
+
+# 阿里云OSS配置
+OSS_ACCESS_KEY=<YOUR_OSS_ACCESS_KEY>
+OSS_SECRET_KEY=<YOUR_OSS_SECRET_KEY>
+OSS_ENDPOINT=https://oss-cn-beijing.aliyuncs.com
+OSS_BUCKET=your-bucket-name
+
+# 高德地图API密钥
+GAODE_KEY=<YOUR_GAODE_API_KEY>
+
+# 管理员认证配置
+USERNAME=admin
+PASSWORD=admin123
+
+# Webhook配置（可选）
+WEBHOOK_URL=https://your-domain.com/webhook

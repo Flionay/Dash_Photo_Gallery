@@ -13,7 +13,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/photo-gallery
+  IMAGE_NAME: dash_photo_gallery/photo-gallery
 
 permissions:  # 新增权限控制
   contents: read
@@ -54,10 +54,10 @@ jobs:
         context: .
         file: ./Dockerfile
         tags: |
-          ghcr.io/${{ github.repository|lower }}/photo-gallery:main
-          ghcr.io/${{ github.repository|lower }}/photo-gallery:sha-${{ github.sha }}
+          ghcr.io/dash_photo_gallery/photo-gallery:main
+          ghcr.io/dash_photo_gallery/photo-gallery:sha-${{ github.sha }}
         push: true
         cache-from: type=gha
         cache-to: type=gha,mode=max
-        provenance: false  # 新增安全特性
+        provenance: false
         sbom: false

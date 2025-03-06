@@ -10,7 +10,7 @@ def get_exif_json(bucket):
     exif_data_dict = json.loads(exif_data.decode('utf-8'))  # 解码为字符串并转换为字典
 
     # 检查本地是否存在 exif_data.json 文件
-    local_exif_file = 'exif_data.json'
+    local_exif_file = './data/exif_data.json'
     local_exif_data_dict = {}
 
     if os.path.exists(local_exif_file):
@@ -74,7 +74,7 @@ def update_albums_json_data(bucket,folder='gallery'):
     albums = convert_dates(albums)
 
     # 将信息保存到JSON文件中
-    with open('albums.json', 'w', encoding='utf-8') as json_file:
+    with open('./data/albums.json', 'w', encoding='utf-8') as json_file:
         json.dump(albums, json_file, ensure_ascii=False, indent=4)
 
     print("相册信息已保存到 albums.json 文件中。")

@@ -18,10 +18,14 @@ ENV PYTHONUNBUFFERED=1 \
 
 # 从构建阶段复制依赖
 COPY --from=builder /root/.local /root/.local
+# 新增数据目录
+RUN mkdir -p /app/data
+
+# 设置数据目录为挂载点
+VOLUME ["/app/data"]
 
 # 调整文件复制顺序
 WORKDIR /app
-COPY main.py .
 COPY . .  
 
 # 暴露端口
@@ -29,3 +33,4 @@ EXPOSE 8089
 
 # 启动命令
 CMD ["gunicorn", "main:server", "--host", "0.0.0.0", "--port", "8089", "--workers", "4"]
+
