@@ -1,3 +1,4 @@
 gallery
 output
 .env
+__pycache__
