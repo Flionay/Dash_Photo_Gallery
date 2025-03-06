@@ -33,18 +33,18 @@
 ### Docker 部署（推荐）
 ```bash
 docker run -d \
-  -p 8050:8050 \
+  -p 8089:8089 \
   -v /your/local/data:/app/data \
   -v /your/local/.env:/app/.env \
   ghcr.io/dash_photo_gallery/photo-gallery:main
 ```
 
 - 访问应用：
-   打开浏览器并访问 `http://127.0.0.1:8050`。
+   打开浏览器并访问 `http://127.0.0.1:8089`。
 
 
 - 管理员可以给照片评分：
-   访问 `http://127.0.0.1:8050/star`。 登录后可以给照片评分（账号密码在.env文件设置）。
+   访问 `http://127.0.0.1:8089/star`。 登录后可以给照片评分（账号密码在.env文件设置）。
 
 ### 源码部署
 ```bash
@@ -63,15 +63,15 @@ vim .env  # 填写实际配置
 
 # 4. 启动应用
 python main.py  # 开发模式
-gunicorn main:application -w 4 -b 0.0.0.0:8050  # 生产模式
+gunicorn main:application -w 4 -b 0.0.0.0:8089  # 生产模式
 ```
 
 - 访问应用：
-打开浏览器并访问 `http://127.0.0.1:8050`。
+打开浏览器并访问 `http://127.0.0.1:8089`。
 
 
 - 管理员可以给照片评分：
-   访问 `http://127.0.0.1:8050/star`。 登录后可以给照片评分（账号密码在.env文件设置）。
+   访问 `http://127.0.0.1:8089/star`。 登录后可以给照片评分（账号密码在.env文件设置）。
 
 ## 📂 目录结构
 ```

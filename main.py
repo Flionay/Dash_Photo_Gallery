@@ -19,7 +19,7 @@ from callbacks.theme import *
 from callbacks.star import *
 from views.navbar import render_navbar
 
-with open("albums.json", "r", encoding="utf-8") as f:
+with open(config.albums_json_path, "r", encoding="utf-8") as f:
     albums_data = json.load(f)
 
 
@@ -95,7 +95,7 @@ app.layout = html.Div(
 )
 def update_app_albums_data(pathname):
     print("用户刷新触发")
-    with open("albums.json", "r", encoding="utf-8") as f:
+    with open(config.albums_json_path, "r", encoding="utf-8") as f:
         albums_data = json.load(f)
     return albums_data
 

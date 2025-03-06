@@ -8,13 +8,14 @@ from fractions import Fraction
 import json
 import os
 import numpy as np
+import config
 
 root_path = os.path.dirname(os.path.abspath(__file__))
 
 def  get_exif_data(image_url):
     # print("输入的url",image_url)
     # 本地 JSON 文件的路径
-    json_file_path = os.path.join(root_path, 'exif_data.json')  # 替换为实际的本地 JSON 文件路径
+    json_file_path = config.exif_json_path # 替换为实际的本地 JSON 文件路径
     try:
         with open(json_file_path, 'r', encoding='utf-8') as json_file:
             exif_data = json.load(json_file)  # 解析 JSON 数据

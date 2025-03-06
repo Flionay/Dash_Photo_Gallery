@@ -76,6 +76,7 @@ def auto_switch_theme(ts, manual_checked, client_time, auto_enabled):
         return dash.no_update, dash.no_update
         
     trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
+    print(client_time)
     
     if trigger_id == "client-time":
         if auto_enabled:  # 仅在自动模式启用时生效
