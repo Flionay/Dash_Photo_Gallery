@@ -32,5 +32,5 @@ COPY . .
 EXPOSE 8089
 
 # 启动命令
-CMD ["gunicorn", "main:server", "--host", "0.0.0.0", "--port", "8089", "--workers", "4"]
+CMD ["gunicorn", "main:server",  "--bind", "0.0.0.0:8089", "--workers", "4"]
 
