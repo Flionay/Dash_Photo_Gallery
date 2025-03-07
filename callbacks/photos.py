@@ -9,7 +9,7 @@ from dash_iconify import DashIconify
 from urllib.parse import unquote
 import json
 import os
-
+import config 
 # 在布局中使用 html.Div 包围图片
 def create_image_card(image_url, index):
     return html.Div(
@@ -300,7 +300,7 @@ def update_likes(n_clicks, image_info):
         return dash.no_update, init_like
 
     # 读取现有的 exif_data.json 文件
-    with open('exif_data.json', 'r', encoding='utf-8') as f:
+    with open(config.exif_json_path, 'r', encoding='utf-8') as f:
         exif_data = json.load(f)
 
     
@@ -309,7 +309,7 @@ def update_likes(n_clicks, image_info):
     exif_data[image_idx]['likes'] += 1  # 增加点赞计数
 
     # 将更新后的数据写回到 exif_data.json 文件
-    with open('exif_data.json', 'w', encoding='utf-8') as f:
+    with open(config.exif_json_path, 'w', encoding='utf-8') as f:
         json.dump(exif_data, f, ensure_ascii=False, indent=4)
 
 

@@ -4,10 +4,10 @@ import json
 from server import app
 import feffery_antd_components as fac
 import os
-
+import config 
 def update_exif_with_ratings(button_id, ratings, albums_data):
     # 读取现有的 exif_data.json 文件
-    with open('exif_data.json', 'r', encoding='utf-8') as f:
+    with open(config.exif_json_path, 'r', encoding='utf-8') as f:
         exif_data = json.load(f)
 
     flag = False
@@ -34,7 +34,7 @@ def update_exif_with_ratings(button_id, ratings, albums_data):
         info = f"未找到图片 {image_id} 在 exif_data.json 中"
         flag = False
     # 将更新后的数据写回到 exif_data.json 文件
-    with open('exif_data.json', 'w', encoding='utf-8') as f:
+    with open(config.exif_json_path, 'w', encoding='utf-8') as f:
         json.dump(exif_data, f, ensure_ascii=False, indent=4)
         
     return info,flag

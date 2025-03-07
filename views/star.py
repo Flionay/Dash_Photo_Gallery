@@ -4,7 +4,7 @@ from dash import html, dcc
 from dash.dependencies import Input, Output, State
 from server import app
 import feffery_antd_components as fac
-
+import config
 import json
 import os
 
@@ -28,7 +28,7 @@ def get_exif_star(exif_data,image_url):
 
 def rating_layout(albums_data):
     
-    with open('exif_data.json', 'r', encoding='utf-8') as f:
+    with open(config.exif_json_path, 'r', encoding='utf-8') as f:
         exif_data = json.load(f)
         
     image_url_list = []
