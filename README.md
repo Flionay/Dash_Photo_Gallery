@@ -31,12 +31,13 @@
 
 ## 🚀 快速部署
 ### Docker 部署（推荐）
+有环境的可以从当前仓库的packages中下载镜像，当然也可以自己编译。
 ```bash
 docker run -d \
   -p 8089:8089 \
   -v /your/local/data:/app/data \
   -v /your/local/.env:/app/.env \
-  angyi123/photo_gallery:v1.0
+  angyi123/photo_gallery:v1.0  #arm版本的
 ```
 
 - 访问应用：
