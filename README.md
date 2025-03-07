@@ -36,7 +36,7 @@ docker run -d \
   -p 8089:8089 \
   -v /your/local/data:/app/data \
   -v /your/local/.env:/app/.env \
-  ghcr.io/dash_photo_gallery/photo-gallery:main
+  angyi123/photo_gallery:v1.0
 ```
 
 - 访问应用：
